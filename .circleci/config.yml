@@ -48,7 +48,6 @@ reusable-steps:
   - &store
     store_artifacts:
       path: config-provider-library/build/outputs/aar
-      path: config-provider-library/build/libs
 
   - &publish_to_qa
     run:
