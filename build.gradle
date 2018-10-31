@@ -1,0 +1,62 @@
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-rc1'
+    }
+}
+
+ext.versionCode = 11000000
+version = "1.0.0-SNAPSHOT"
+
+allprojects {
+
+    project.ext {
+        apiVersion = rootProject.version
+        apiVersionCode = rootProject.versionCode
+    }
+
+    repositories {
+        google()
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
+        maven {
+            url "s3://sdk-snapshots.aevi.com/maven2"
+            credentials(AwsCredentials) {
+                accessKey aws_accessid
+                secretKey aws_accesskey
+            }
+        }
+        maven {
+            url "s3://sdk-qa.aevi.com/maven2"
+            credentials(AwsCredentials) {
+                accessKey aws_accessid
+                secretKey aws_accesskey
+            }
+        }
+        maven {
+            url "s3://sdk-releases.aevi.com/maven2"
+            credentials(AwsCredentials) {
+                accessKey aws_accessid
+                secretKey aws_accesskey
+            }
+        }
+        maven {
+            url "http://dl.bintray.com/aevi/aevi-uk"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+apply from: 'dependencies.gradle'

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2f6ab8</color>
+    <color name="colorPrimaryDark">#173d71</color>
+    <color name="colorAccent">#ff2e7d32</color>
+    <color name="colorAlert">#ff999999</color>
+    <color name="colorMainText">#ff333333</color>
+    <color name="colorTitleText">#ffffff</color>
+
+    <color name="flowItemBackground">#ffffff</color>
+    <color name="appGridBackground">#e0e0e0</color>
+    <color name="flowSectionBackground">#bbbbbb</color>
+    <color name="colorColumnHeadBackground">#dddddd</color>
+
+    <color name="flowAppDisabled">#cccccc</color>
+
+</resources>
