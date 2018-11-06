@@ -42,7 +42,7 @@ and deselecting the check box.
 
 ## Bugs and Feedback
 
-For bugs, feature requests and discussion please use [GitHub Issues](https://github.com/Aevi-UK/android-ui-library/issues)
+For bugs, feature requests and discussion please use [GitHub Issues](https://github.com/Aevi-AppFlow/config-provider-library/issues)
 
 ## LICENSE
 
