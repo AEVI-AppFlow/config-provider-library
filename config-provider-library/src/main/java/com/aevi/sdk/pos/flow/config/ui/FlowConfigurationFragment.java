@@ -39,8 +39,8 @@ import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.R2;
 import com.aevi.sdk.pos.flow.config.SettingsProvider;
-import com.aevi.sdk.pos.flow.config.flowapps.AppDatabase;
-import com.aevi.sdk.pos.flow.config.flowapps.FlowConfigStore;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 import com.aevi.sdk.pos.flow.config.ui.view.AppGridAdapter;
 import com.aevi.sdk.pos.flow.config.ui.view.FlowSectionRecyclerList;
 import com.aevi.ui.library.recycler.DropDownSpinner;
@@ -85,10 +85,10 @@ public class FlowConfigurationFragment extends BaseFragment {
     @BindView(R2.id.auto_switch)
     Switch autoModeSwitch;
 
-    private FlowConfigStore flowConfigStore;
+    private ProviderFlowConfigStore flowConfigStore;
 
     @Inject
-    AppDatabase appDatabase;
+    ProviderAppDatabase appDatabase;
 
     @Inject
     SettingsProvider settingsProvider;

@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 @Singleton
 public class FlowAppChangeReceiver extends AppChangeReceiver {
 
-    private final AppEntityScanningHelper appEntityScanningHelper;
+    private final ProviderAppScanner appEntityScanningHelper;
     private final Context context;
 
     public FlowAppChangeReceiver() {
@@ -34,7 +34,7 @@ public class FlowAppChangeReceiver extends AppChangeReceiver {
     }
 
     @Inject
-    public FlowAppChangeReceiver(AppDatabase appDatabase, AppEntityScanningHelper appEntityScanningHelper, Context context) {
+    public FlowAppChangeReceiver(ProviderAppDatabase appDatabase, ProviderAppScanner appEntityScanningHelper, Context context) {
         super(appDatabase);
         this.appEntityScanningHelper = appEntityScanningHelper;
         this.context = context;

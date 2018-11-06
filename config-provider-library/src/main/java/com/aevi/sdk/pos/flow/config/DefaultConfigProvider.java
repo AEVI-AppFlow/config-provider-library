@@ -15,29 +15,16 @@ package com.aevi.sdk.pos.flow.config;
 
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.aevi.sdk.pos.flow.config.flowapps.FlowAppChangeReceiver;
-import com.aevi.sdk.pos.flow.config.flowapps.FlowConfigStore;
 import com.aevi.sdk.config.provider.BaseConfigProvider;
 import com.aevi.sdk.flow.model.config.ConfigStyles;
-
-import java.util.Arrays;
-import java.util.Set;
+import com.aevi.sdk.pos.flow.config.flowapps.FlowAppChangeReceiver;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 
 import javax.inject.Inject;
 
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.COLOR_ACCENT;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.COLOR_ALERT;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.COLOR_MAIN_TEXT;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.COLOR_PRIMARY;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.COLOR_PRIMARY_DARK;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.COLOR_TITLE_TEXT;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.DIALOG_STYLE;
-import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.DIALOG_STYLE_FULLSCREEN;
-import static com.aevi.sdk.flow.constants.config.FlowConfigKeys.FPS_CONFIG_KEY_FLOW_CONFIGS;
-import static com.aevi.sdk.flow.constants.config.FlowConfigKeys.FPS_CONFIG_KEY_SETTINGS;
-import static com.aevi.sdk.flow.constants.config.FlowConfigKeys.FPS_CONFIG_KEY_STYLES;
+import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.*;
+import static com.aevi.sdk.flow.constants.config.FlowConfigKeys.*;
 
 
 public class DefaultConfigProvider extends BaseConfigProvider {
@@ -46,7 +33,7 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     private static final String APPFLOW_COMMS_CHANNEL_KEY = "appFlowCommsChannel";
     private static final String LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST = "whitelist_OPERATOR";
 
-    private FlowConfigStore flowConfigStore;
+    private ProviderFlowConfigStore flowConfigStore;
 
     @Inject
     SettingsProvider settingsProvider;
@@ -95,22 +82,11 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     public String[] getConfigArrayValue(String key) {
         switch (key) {
             case FPS_CONFIG_KEY_FLOW_CONFIGS:
-                return getFlowConfigs();
+                return flowConfigStore.getAllFlowConfigs();
             case LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST:
                 return getWhitelist();
         }
         return new String[0];
-    }
-
-    public String[] getFlowConfigs() {
-        Set<String> flowNames = flowConfigStore.getAllFlowNames();
-        String[] flowConfigs = new String[flowNames.size()];
-        int index = 0;
-        for (String flowName : flowNames) {
-            flowConfigs[index++] = flowConfigStore.readFlowConfigJson(flowName);
-        }
-        Log.d(TAG, "Returning flow configs: " + Arrays.toString(flowConfigs));
-        return flowConfigs;
     }
 
     @NonNull
@@ -130,7 +106,6 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     }
 
     private String getStyleConfig() {
-        // TODO this could be read from fixed json file (would be quicker??)
         ConfigStyles configStyles = new ConfigStyles();
         Resources resources = getContext().getResources();
         configStyles.setColor(COLOR_PRIMARY, resources.getColor(R.color.colorPrimary));
@@ -146,6 +121,6 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     }
 
     private String[] getWhitelist() {
-        return getContext().getResources().getStringArray( R.array.whitelist_default);
+        return getContext().getResources().getStringArray(R.array.whitelist_default);
     }
 }

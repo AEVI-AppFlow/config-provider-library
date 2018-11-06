@@ -20,8 +20,8 @@ import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
 import com.aevi.sdk.pos.flow.config.SettingsProvider;
 import com.aevi.sdk.pos.flow.config.StartUpReceiver;
-import com.aevi.sdk.pos.flow.config.flowapps.AppDatabase;
-import com.aevi.sdk.pos.flow.config.flowapps.AppEntityScanningHelper;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
 import com.aevi.sdk.pos.flow.config.ui.BaseConfigurationActivity;
 import com.aevi.sdk.pos.flow.config.ui.FlowConfigurationFragment;
 import com.aevi.sdk.pos.flow.config.ui.SettingsFragment;
@@ -40,9 +40,9 @@ public interface FpsConfigComponent {
 
     Context provideApplicationContext();
 
-    AppEntityScanningHelper provideAppEntityScanningHelper();
+    ProviderAppScanner provideAppEntityScanningHelper();
 
-    AppDatabase provideAppDatabase();
+    ProviderAppDatabase provideAppDatabase();
 
     SettingsProvider provideSettingsProvider();
 
