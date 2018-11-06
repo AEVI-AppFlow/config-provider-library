@@ -19,8 +19,8 @@ import android.util.Log;
 
 import com.aevi.sdk.app.scanning.AppInfoProvider;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
-import com.aevi.sdk.pos.flow.config.model.AppType;
 import com.aevi.sdk.flow.model.config.FlowApp;
+import com.aevi.sdk.pos.flow.config.model.AppType;
 import com.aevi.sdk.pos.flow.model.PaymentFlowServiceInfo;
 import com.aevi.sdk.pos.flow.model.PaymentFlowServiceInfoBuilder;
 
@@ -37,9 +37,9 @@ import io.reactivex.subjects.BehaviorSubject;
 import static com.aevi.sdk.flow.constants.FlowStages.TRANSACTION_PROCESSING;
 
 @Singleton
-public class AppDatabase implements AppInfoProvider {
+public class ProviderAppDatabase implements AppInfoProvider {
 
-    private static final String TAG = AppDatabase.class.getSimpleName();
+    private static final String TAG = ProviderAppDatabase.class.getSimpleName();
 
     private BehaviorSubject<List<AppInfoModel>> modelStream = BehaviorSubject.create();
 
@@ -48,7 +48,7 @@ public class AppDatabase implements AppInfoProvider {
     private final Context context;
 
     @Inject
-    public AppDatabase(Context context) {
+    public ProviderAppDatabase(Context context) {
         this.context = context;
     }
 
