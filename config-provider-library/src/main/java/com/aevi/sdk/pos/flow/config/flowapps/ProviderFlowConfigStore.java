@@ -327,6 +327,24 @@ public class ProviderFlowConfigStore {
         writeDefaultFlowConfigs();
     }
 
+    /**
+     * Replaces any existing flow config with the same flow name as the provided config.
+     */
+    public void replaceFlowConfig(int flowConfigRes) {
+        lock.writeLock().lock();
+        try {
+            String json = readFile(flowConfigRes);
+            FlowConfig flowConfig = FlowConfig.fromJson(json);
+            String configFileName = getConfigFileName(flowConfig.getName());
+            context.deleteFile(configFileName);
+            allFlowNames.add(flowConfig.getName());
+            allFlowTypes.add(flowConfig.getType());
+            saveFlowConfig(flowConfig);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
     private void addFlowConfig(int defaultConfigId) {
         String json = readFile(defaultConfigId);
         FlowConfig flowConfig = FlowConfig.fromJson(json);
