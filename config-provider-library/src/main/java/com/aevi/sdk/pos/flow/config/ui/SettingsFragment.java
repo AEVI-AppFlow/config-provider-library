@@ -17,11 +17,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
-import com.aevi.sdk.pos.flow.config.R;
-import com.aevi.sdk.pos.flow.config.R2;
-import com.aevi.sdk.pos.flow.config.SettingsProvider;
+import com.aevi.sdk.pos.flow.config.*;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
 import com.aevi.ui.library.views.EditTimeout;
 import com.aevi.ui.library.views.SettingSwitch;
 
@@ -30,8 +28,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 
-import static com.aevi.sdk.pos.flow.config.model.Channels.MESSENGER;
-import static com.aevi.sdk.pos.flow.config.model.Channels.WEBSOCKET;
+import static com.aevi.sdk.pos.flow.config.model.Channels.*;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -62,11 +59,20 @@ public class SettingsFragment extends BaseFragment {
     @BindView(R2.id.use_websocket)
     SettingSwitch useWebsocket;
 
+    @BindView(R2.id.enable_legacy_pa_support)
+    SettingSwitch enableLegacySupport;
+
     @Inject
     SettingsProvider settingsProvider;
 
     @Inject
     Context appContext;
+
+    @Inject
+    ProviderAppDatabase appDatabase;
+
+    @Inject
+    ProviderAppScanner appScanner;
 
     private boolean settingsChanged = false;
 
@@ -98,85 +104,48 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void setupFlags() {
-        abortOnPayment.subscribeToValueChanges().subscribe(new FlagChange(R.id.abort_on_payment_error));
-        abortOnFlow.subscribeToValueChanges().subscribe(new FlagChange(R.id.abort_on_flow_error));
-        allowStatusBar.subscribeToValueChanges().subscribe(new FlagChange(R.id.allow_status_bar_access));
-        useWebsocket.subscribeToValueChanges().subscribe(new FlagChange(R.id.use_websocket));
+        abortOnPayment.subscribeToValueChanges().subscribe(value -> settingsProvider.abortOnPaymentError(value));
+        abortOnFlow.subscribeToValueChanges().subscribe(value -> settingsProvider.abortOnFlowError(value));
+        allowStatusBar.subscribeToValueChanges().subscribe(value -> settingsProvider.allowStatusBarAccess(value));
+        useWebsocket.subscribeToValueChanges().subscribe(value -> {
+            if (value) {
+                settingsProvider.setCommsChannel(WEBSOCKET);
+            } else {
+                settingsProvider.setCommsChannel(MESSENGER);
+            }
+        });
+        enableLegacySupport.subscribeToValueChanges().subscribe(enabled -> {
+            settingsProvider.setLegacyPaymentAppsEnabled(enabled);
+            if (!enabled) {
+                appDatabase.clearApps();
+                appScanner.reScanForPaymentAndFlowApps();
+            }
+        });
         abortOnPayment.setChecked(settingsProvider.shouldAbortOnPaymentAppError());
         abortOnFlow.setChecked(settingsProvider.shouldAbortOnFlowAppError());
         allowStatusBar.setChecked(settingsProvider.allowAccessViaStatusBar());
         useWebsocket.setChecked(settingsProvider.getCommsChannel().equals(WEBSOCKET));
+        enableLegacySupport.setChecked(settingsProvider.legacyPaymentAppsEnabled());
     }
 
     protected void setupTimeouts() {
-        setupEditTimeout(splitTimeout, settingsProvider.getSplitResponseTimeoutSeconds(), R.id.split_timeout);
-        setupEditTimeout(flowResponseTimeout, settingsProvider.getFlowResponseTimeoutSeconds(), R.id.flow_response_timeout);
-        setupEditTimeout(paymentResponseTimeout, settingsProvider.getPaymentResponseTimeoutSeconds(), R.id.payment_response_timeout);
-        setupEditTimeout(selectTimeout, settingsProvider.getAppOrDeviceSelectionTimeoutSeconds(), R.id.select_timeout);
+        setupEditTimeout(splitTimeout, settingsProvider.getSplitResponseTimeoutSeconds(),
+                         integer -> settingsProvider.setSplitResponseTimeoutSeconds(integer));
+        setupEditTimeout(flowResponseTimeout, settingsProvider.getFlowResponseTimeoutSeconds(),
+                         integer -> settingsProvider.setFlowResponseTimeoutSeconds(integer));
+        setupEditTimeout(paymentResponseTimeout, settingsProvider.getPaymentResponseTimeoutSeconds(),
+                         integer -> settingsProvider.setPaymentResponseTimeoutSeconds(integer));
+        setupEditTimeout(selectTimeout, settingsProvider.getAppOrDeviceSelectionTimeoutSeconds(),
+                         integer -> settingsProvider.setAppOrDeviceSelectionTimeoutSeconds(integer));
     }
 
-    private void setupEditTimeout(EditTimeout editTimeout, int value, int resId) {
+    private void setupEditTimeout(EditTimeout editTimeout, int value, TimeoutChange timeoutChange) {
         editTimeout.setMinMax(TIMEOUT_MIN, TIMEOUT_MAX);
         editTimeout.setInitialValue(value);
-        observe(editTimeout.subscribeToValueChanges()).subscribe(new TimeoutChange(resId));
+        observe(editTimeout.subscribeToValueChanges()).subscribe(timeoutChange);
     }
 
-    class TimeoutChange implements Consumer<Integer> {
-
-        private final int resId;
-
-        TimeoutChange(int resId) {
-            this.resId = resId;
-        }
-
-        @Override
-        public void accept(Integer integer) throws Exception {
-            switch (resId) {
-                case R2.id.split_timeout:
-                    settingsProvider.setSplitResponseTimeoutSeconds(integer);
-                    break;
-                case R2.id.flow_response_timeout:
-                    settingsProvider.setFlowResponseTimeoutSeconds(integer);
-                    break;
-                case R2.id.payment_response_timeout:
-                    settingsProvider.setPaymentResponseTimeoutSeconds(integer);
-                    break;
-                case R2.id.select_timeout:
-                    settingsProvider.setAppOrDeviceSelectionTimeoutSeconds(integer);
-                    break;
-            }
-            settingsChanged = true;
-        }
-    }
-
-    class FlagChange implements Consumer<Boolean> {
-
-        private final int resId;
-
-        FlagChange(int resId) {
-            this.resId = resId;
-        }
-
-        @Override
-        public void accept(Boolean value) throws Exception {
-            switch (resId) {
-                case R2.id.abort_on_payment_error:
-                    settingsProvider.abortOnPaymentError(value);
-                    break;
-                case R2.id.abort_on_flow_error:
-                    settingsProvider.abortOnFlowError(value);
-                    break;
-                case R2.id.allow_status_bar_access:
-                    settingsProvider.allowStatusBarAccess(value);
-                    break;
-                case R2.id.use_websocket:
-                    if(value) {
-                        settingsProvider.setCommsChannel(WEBSOCKET);
-                    } else {
-                        settingsProvider.setCommsChannel(MESSENGER);
-                    }
-            }
-            settingsChanged = true;
-        }
+    interface TimeoutChange extends Consumer<Integer> {
+        void accept(Integer integer);
     }
 }

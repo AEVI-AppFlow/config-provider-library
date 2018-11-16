@@ -23,6 +23,8 @@
     <string name="settings_abort_payment_app_summary">If set this flag ensures that the flow will be aborted (CANCELLED) if an error occurs during a call to ANY payment application. If disabled the flow will keep attempting to take payment until manually cancelled.</string>
     <string name="settings_allow_status_bar">Allow status bar access</string>
     <string name="settings_allow_status_bar_summary">If set this flag will allow access to FPS from the status bar.</string>
+    <string name="settings_enable_legacy_pa_support">Enable legacy payment app support</string>
+    <string name="settings_enable_legacy_pa_support_summary">If set this flag will enable support for legacy payment apps (AEVI Public SDK v2.x.x).</string>
     <string name="settings_use_websocket">Use websocket communications</string>
     <string name="settings_use_websocket_summary">If set the all AppFlow communication will be sent over a websocket instead of the default Android Messenger</string>
     <string name="menu_flow_configuration">Flow configuration</string>
