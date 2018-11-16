@@ -12,8 +12,8 @@ buildscript {
     }
 }
 
-ext.versionCode = 11000001
-version = "1.0.0-RC3"
+ext.versionCode = 11000002
+version = "1.0.0-RC4"
 
 allprojects {
 
