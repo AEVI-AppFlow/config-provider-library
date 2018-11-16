@@ -103,6 +103,16 @@
                     app:switchTitle="@string/settings_allow_status_bar"/>
 
                 <com.aevi.ui.library.views.SettingSwitch
+                    android:id="@+id/enable_legacy_pa_support"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:switchDefaultValue="true"
+                    app:switchSummary="@string/settings_enable_legacy_pa_support_summary"
+                    app:switchTitle="@string/settings_enable_legacy_pa_support"/>
+
+
+                <com.aevi.ui.library.views.SettingSwitch
                     android:id="@+id/use_websocket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
