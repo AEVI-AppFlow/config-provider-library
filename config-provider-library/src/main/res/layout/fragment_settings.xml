@@ -107,17 +107,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_vertical"
-                    app:switchDefaultValue="true"
+                    app:switchDefaultValue="false"
                     app:switchSummary="@string/settings_enable_legacy_pa_support_summary"
                     app:switchTitle="@string/settings_enable_legacy_pa_support"/>
 
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/experimental_features_title"/>
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/warning_experimental"/>
 
                 <com.aevi.ui.library.views.SettingSwitch
                     android:id="@+id/use_websocket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_vertical"
-                    app:switchDefaultValue="true"
+                    app:switchDefaultValue="false"
                     app:switchSummary="@string/settings_use_websocket_summary"
                     app:switchTitle="@string/settings_use_websocket"/>
             </LinearLayout>

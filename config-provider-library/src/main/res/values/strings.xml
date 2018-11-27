@@ -24,13 +24,15 @@
     <string name="settings_allow_status_bar">Allow status bar access</string>
     <string name="settings_allow_status_bar_summary">If set this flag will allow access to FPS from the status bar.</string>
     <string name="settings_enable_legacy_pa_support">Enable legacy payment app support</string>
-    <string name="settings_enable_legacy_pa_support_summary">If set this flag will enable support for legacy payment apps (AEVI Public SDK v2.x.x).</string>
+    <string name="settings_enable_legacy_pa_support_summary">If set this flag will enable support for legacy payment apps (AEVI Public SDK - Simple Payment API v2).</string>
     <string name="settings_use_websocket">Use websocket communications</string>
-    <string name="settings_use_websocket_summary">If set the all AppFlow communication will be sent over a websocket instead of the default Android Messenger</string>
+    <string name="settings_use_websocket_summary">If set, all AppFlow IPC will be performed over a websocket instead of the default Android Messenger</string>
     <string name="menu_flow_configuration">Flow configuration</string>
     <string name="menu_settings">Settings</string>
     <string name="openDrawer">Open navigation</string>
     <string name="closeDrawer">Close navigation</string>
     <string name="auto_generate_configs">AUTO</string>
+    <string name="experimental_features_title">Experimental features</string>
+    <string name="warning_experimental">Warning: The features below are currently in development and not guaranteed to work. Use with caution.</string>
 
 </resources>
