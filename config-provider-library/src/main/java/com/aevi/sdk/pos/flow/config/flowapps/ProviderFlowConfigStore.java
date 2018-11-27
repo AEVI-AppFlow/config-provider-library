@@ -18,31 +18,19 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
-import com.aevi.sdk.flow.model.config.AppExecutionType;
-import com.aevi.sdk.flow.model.config.FlowApp;
-import com.aevi.sdk.flow.model.config.FlowConfig;
-import com.aevi.sdk.flow.model.config.FlowConfigBuilder;
-import com.aevi.sdk.flow.model.config.FlowStage;
+import com.aevi.sdk.flow.model.config.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import okio.BufferedSink;
 import okio.Okio;
 
-public class FlowConfigStore {
+public class ProviderFlowConfigStore {
 
-    private static final String TAG = FlowConfigStore.class.getSimpleName();
+    private static final String TAG = ProviderFlowConfigStore.class.getSimpleName();
 
     private final Context context;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -53,7 +41,7 @@ public class FlowConfigStore {
 
     private final int[] defaultFlowConfigs;
 
-    public FlowConfigStore(Context context, int[] defaultFlowConfigs) {
+    public ProviderFlowConfigStore(Context context, int[] defaultFlowConfigs) {
         this.context = context;
         this.defaultFlowConfigs = defaultFlowConfigs;
         allFlowTypes = new HashSet<>();
@@ -68,8 +56,15 @@ public class FlowConfigStore {
     }
 
     private void writeDefaultFlowConfigs() {
-        for (int config : defaultFlowConfigs) {
-            addFlowConfig(config);
+        lock.writeLock().lock();
+        try {
+            for (int config : defaultFlowConfigs) {
+                addFlowConfig(config);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to write defaults", e);
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
@@ -115,7 +110,6 @@ public class FlowConfigStore {
                         doUpdateFlowAppInConfig(flowConfig, appInfoModel);
                     }
                 }
-                // TODO may want to clear apps that have been uninstalled
                 saveFlowConfig(flowConfig);
             }
         } finally {
@@ -180,11 +174,20 @@ public class FlowConfigStore {
         Set<String> stages = appInfoModel.getPaymentFlowServiceInfo().getStages();
         for (String stageName : stages) {
             FlowStage stage = flowConfig.getStage(stageName);
-            if (stage != null) {
+            if (stage != null && !stageHasApp(stage, appInfoModel.getPaymentFlowServiceInfo().getPackageName())) {
                 FlowApp flowApp = new FlowApp(appInfoModel.getPaymentFlowServiceInfo().getPackageName());
                 addOrUpdateApp(flowApp, stageName, flowConfig);
             }
         }
+    }
+
+    private boolean stageHasApp(FlowStage flowStage, String packageName) {
+        for (FlowApp flowApp : flowStage.getFlowApps()) {
+            if (flowApp.getId().equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addOrUpdateApp(FlowApp flowApp, String stage, FlowConfig flowConfig) {
@@ -245,14 +248,19 @@ public class FlowConfigStore {
     }
 
     private void parseStoredFlowConfigs() {
-        String[] configs = context.getFilesDir().list((file1, name) -> name.endsWith(".json"));
-        for (String config : configs) {
-            FlowConfig flowConfig = FlowConfig.fromJson(doReadFlowConfig(config));
-            if (flowConfig != null) {
-                Log.d(TAG, "Found valid flow: " + flowConfig.getName());
-                allFlowNames.add(flowConfig.getName());
-                allFlowTypes.add(flowConfig.getType());
+        lock.readLock().lock();
+        try {
+            String[] configs = context.getFilesDir().list((file1, name) -> name.endsWith(".json"));
+            for (String config : configs) {
+                FlowConfig flowConfig = FlowConfig.fromJson(doReadFlowConfig(config));
+                if (flowConfig != null) {
+                    Log.d(TAG, "Found valid flow: " + flowConfig.getName());
+                    allFlowNames.add(flowConfig.getName());
+                    allFlowTypes.add(flowConfig.getType());
+                }
             }
+        } finally {
+            lock.readLock().unlock();
         }
     }
 
@@ -273,6 +281,23 @@ public class FlowConfigStore {
             lock.readLock().unlock();
         }
         return "";
+    }
+
+    public String[] getAllFlowConfigs() {
+        lock.readLock().lock();
+        try {
+            String[] flowConfigs = new String[allFlowNames.size()];
+            int index = 0;
+            for (String flowName : allFlowNames) {
+                flowConfigs[index++] = readFlowConfigJson(flowName);
+            }
+            Log.d(TAG, "All flow configs: " + Arrays.toString(flowConfigs));
+            return flowConfigs;
+        } catch (Exception e) {
+            return new String[0];
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
     @NonNull
@@ -297,7 +322,30 @@ public class FlowConfigStore {
         return file.list().length > 0;
     }
 
-    public void addFlowConfig(int defaultConfigId) {
+    public void resetFlowConfigs() {
+        deleteStoredFlowConfigs();
+        writeDefaultFlowConfigs();
+    }
+
+    /**
+     * Replaces any existing flow config with the same flow name as the provided config.
+     */
+    public void replaceFlowConfig(int flowConfigRes) {
+        lock.writeLock().lock();
+        try {
+            String json = readFile(flowConfigRes);
+            FlowConfig flowConfig = FlowConfig.fromJson(json);
+            String configFileName = getConfigFileName(flowConfig.getName());
+            context.deleteFile(configFileName);
+            allFlowNames.add(flowConfig.getName());
+            allFlowTypes.add(flowConfig.getType());
+            saveFlowConfig(flowConfig);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private void addFlowConfig(int defaultConfigId) {
         String json = readFile(defaultConfigId);
         FlowConfig flowConfig = FlowConfig.fromJson(json);
         allFlowNames.add(flowConfig.getName());
@@ -317,11 +365,16 @@ public class FlowConfigStore {
         return "";
     }
 
-    public void deleteStoredFlowConfigs() {
-        for (String fileName : context.fileList()) {
-            if (fileName.endsWith(CONFIG_FILE_NAME)) {
-                context.deleteFile(fileName);
+    private void deleteStoredFlowConfigs() {
+        lock.writeLock().lock();
+        try {
+            for (String fileName : context.fileList()) {
+                if (fileName.endsWith(CONFIG_FILE_NAME)) {
+                    context.deleteFile(fileName);
+                }
             }
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 }

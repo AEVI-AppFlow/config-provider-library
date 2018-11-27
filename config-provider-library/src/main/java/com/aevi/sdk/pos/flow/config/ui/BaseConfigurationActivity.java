@@ -32,7 +32,7 @@ import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
 import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.R2;
-import com.aevi.sdk.pos.flow.config.flowapps.AppEntityScanningHelper;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
 
 import javax.inject.Inject;
 
@@ -48,7 +48,7 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
     private boolean showRefreshMenu;
 
     @Inject
-    AppEntityScanningHelper appEntityScanningHelper;
+    ProviderAppScanner appEntityScanningHelper;
 
     @BindView(R2.id.toolbar)
     Toolbar toolbar;
@@ -93,17 +93,18 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
         navigationView.inflateMenu(getNavigationMenu());
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
+        ActionBarDrawerToggle actionBarDrawerToggle =
+                new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                    }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        super.onDrawerOpened(drawerView);
+                    }
+                };
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -162,22 +163,22 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                    drawerLayout.closeDrawer(Gravity.LEFT);
-                } else {
-                    drawerLayout.openDrawer(Gravity.LEFT);
-                }
-                return true;
-            case R2.id.menu_refresh_apps:
-                appEntityScanningHelper.reScanForPaymentAndFlowApps();
-                return true;
-            case R2.id.menu_send_to_fps:
-                DefaultConfigProvider.notifyConfigUpdated(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            } else {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+            return true;
+        } else if (itemId == R.id.menu_refresh_apps) {
+            appEntityScanningHelper.reScanForPaymentAndFlowApps();
+            return true;
+        } else if (itemId == R.id.menu_send_to_fps) {
+            DefaultConfigProvider.notifyConfigUpdated(this);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

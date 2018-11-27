@@ -32,20 +32,21 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 
 @Singleton
-public class AppEntityScanningHelper {
+public class ProviderAppScanner {
 
-    private static final String TAG = AppEntityScanningHelper.class.getSimpleName();
+    private static final String TAG = ProviderAppScanner.class.getSimpleName();
 
-    private final AppDatabase appDatabase;
-    private final FlowConfigStore flowConfigStore;
+    private final ProviderAppDatabase appDatabase;
+    private final ProviderFlowConfigStore flowConfigStore;
     private final Context appContext;
     private final SettingsProvider settingsProvider;
     private final PaymentFlowServiceScanner flowServiceScanner;
     private final LegacyPaymentAppScanner legacyPaymentAppScanner;
 
     @Inject
-    public AppEntityScanningHelper(AppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner, LegacyPaymentAppScanner legacyPaymentAppScanner,
-                                  Context appContext, SettingsProvider settingsProvider) {
+    public ProviderAppScanner(ProviderAppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner,
+                              LegacyPaymentAppScanner legacyPaymentAppScanner,
+                              Context appContext, SettingsProvider settingsProvider) {
         this.appDatabase = appDatabase;
         this.flowServiceScanner = flowServiceScanner;
         this.legacyPaymentAppScanner = legacyPaymentAppScanner;
@@ -56,17 +57,16 @@ public class AppEntityScanningHelper {
 
     public void reScanForPaymentAndFlowApps() {
         LogcatAudit logcatAudit = new LogcatAudit();
-        Observable.merge(flowServiceScanner.scan(logcatAudit), legacyPaymentAppScanner.scan(logcatAudit)).toList().subscribe(this::handleApps);
+        if (settingsProvider.legacyPaymentAppsEnabled()) {
+            Observable.merge(flowServiceScanner.scan(logcatAudit), legacyPaymentAppScanner.scan(logcatAudit)).toList().subscribe(this::handleApps);
+        } else {
+            flowServiceScanner.scan(logcatAudit).toList().subscribe(this::handleApps);
+        }
     }
 
     private void handleApps(List<AppInfoModel> newApps) {
         if (newApps == null || newApps.size() == 0) {
             appDatabase.clearApps();
-            if (settingsProvider.shouldAutoGenerateConfigs()) {
-                Log.d(TAG, "Auto-add apps is set - clearing flow config apps");
-                flowConfigStore.removeAllApps();
-                DefaultConfigProvider.notifyConfigUpdated(appContext);
-            }
         } else {
             for (AppInfoModel appInfoModel : newApps) {
                 appDatabase.save(appInfoModel);

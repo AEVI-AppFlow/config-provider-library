@@ -19,6 +19,7 @@ public class SettingsProvider {
 
     private static final String KEY_FPS_SETTINGS = "fpsSettings";
     private static final String KEY_AUTO_GENERATE_CONFIGS = "autoGenerateConfigs";
+    private static final String KEY_OVERWRITE_CONFIGS_ON_REINSTALL = "overwriteConfigsOnReinstall";
     private static final String KEY_COMMS_CHANNEL = "commsChannel";
 
     private PublishSubject<SettingsProvider> settingsChangeSubject = PublishSubject.create();
@@ -37,11 +38,19 @@ public class SettingsProvider {
     }
 
     public boolean shouldAutoGenerateConfigs() {
-        return preferences.getBoolean(KEY_AUTO_GENERATE_CONFIGS, true);
+        return preferences.getBoolean(KEY_AUTO_GENERATE_CONFIGS, false);
     }
 
     public void updateAutoGenerateConfig(boolean autoUpdate) {
         preferences.edit().putBoolean(KEY_AUTO_GENERATE_CONFIGS, autoUpdate).apply();
+    }
+
+    public boolean shouldOverwriteConfigsOnReinstall() {
+        return preferences.getBoolean(KEY_OVERWRITE_CONFIGS_ON_REINSTALL, false);
+    }
+
+    public void setOverwriteConfigsOnReinstall(boolean overwrite) {
+        preferences.edit().putBoolean(KEY_OVERWRITE_CONFIGS_ON_REINSTALL, overwrite).apply();
     }
 
     private void setupDefaultFpsSettings() {
@@ -117,6 +126,15 @@ public class SettingsProvider {
     public void abortOnFlowError(boolean abort) {
         fpsSettings.setAbortOnFlowError(abort);
         saveFpsSettings();
+    }
+
+    public void setLegacyPaymentAppsEnabled(boolean legacyPaymentAppsEnabled) {
+        fpsSettings.setLegacyPaymentAppsEnabled(legacyPaymentAppsEnabled);
+        saveFpsSettings();
+    }
+
+    public boolean legacyPaymentAppsEnabled() {
+        return fpsSettings.legacyPaymentAppsEnabled();
     }
 
     private void saveFpsSettings() {

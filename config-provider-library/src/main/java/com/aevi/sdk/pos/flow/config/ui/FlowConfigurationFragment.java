@@ -23,24 +23,16 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 import com.aevi.sdk.flow.model.config.AppExecutionType;
 import com.aevi.sdk.flow.model.config.FlowApp;
 import com.aevi.sdk.flow.model.config.FlowConfig;
 import com.aevi.sdk.flow.model.config.FlowStage;
-import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
-import com.aevi.sdk.pos.flow.config.R;
-import com.aevi.sdk.pos.flow.config.R2;
-import com.aevi.sdk.pos.flow.config.SettingsProvider;
-import com.aevi.sdk.pos.flow.config.flowapps.AppDatabase;
-import com.aevi.sdk.pos.flow.config.flowapps.FlowConfigStore;
+import com.aevi.sdk.pos.flow.config.*;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 import com.aevi.sdk.pos.flow.config.ui.view.AppGridAdapter;
 import com.aevi.sdk.pos.flow.config.ui.view.FlowSectionRecyclerList;
 import com.aevi.ui.library.recycler.DropDownSpinner;
@@ -85,10 +77,10 @@ public class FlowConfigurationFragment extends BaseFragment {
     @BindView(R2.id.auto_switch)
     Switch autoModeSwitch;
 
-    private FlowConfigStore flowConfigStore;
+    private ProviderFlowConfigStore flowConfigStore;
 
     @Inject
-    AppDatabase appDatabase;
+    ProviderAppDatabase appDatabase;
 
     @Inject
     SettingsProvider settingsProvider;
@@ -163,7 +155,8 @@ public class FlowConfigurationFragment extends BaseFragment {
 
     private void setupFlows(Set<String> flowNames) {
         // TODO - sort out ordering here
-        ArrayAdapter requestTypeAdapter = new ArrayAdapter<>(this.getContext(), R.layout.dropdown_layout, flowNames.toArray(new String[flowNames.size()]));
+        ArrayAdapter requestTypeAdapter =
+                new ArrayAdapter<>(this.getContext(), R.layout.dropdown_layout, flowNames.toArray(new String[flowNames.size()]));
         requestTypeAdapter.setDropDownViewResource(R.layout.dropdown_item);
         flowNameSpinner.setAdapter(requestTypeAdapter);
         flowNameSpinner.setSpinnerEventsListener(new DropDownSpinner.OnSpinnerEventsListener() {
@@ -255,6 +248,11 @@ public class FlowConfigurationFragment extends BaseFragment {
         AppGridAdapter adapter = new AppGridAdapter(flowApps, (app) -> {
             if (flowName != null) {
                 flowConfigStore.toggleFlowAppInConfig(flowName, app);
+                if (settingsProvider.shouldAutoGenerateConfigs()) {
+                    settingsProvider.updateAutoGenerateConfig(false);
+                    autoModeSwitch.setChecked(false);
+                    Toast.makeText(getContext(), "Auto-adding apps to flows is now disabled due to manual configuration", Toast.LENGTH_SHORT).show();
+                }
             }
             setupStages();
             flowChanged = true;
