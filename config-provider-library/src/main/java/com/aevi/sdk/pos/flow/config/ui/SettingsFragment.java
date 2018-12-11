@@ -103,6 +103,18 @@ public class SettingsFragment extends BaseFragment {
         setupFlags();
     }
 
+    private void setupChangeDetection(EditTimeout... timeouts) {
+        for (EditTimeout timeout : timeouts) {
+            timeout.subscribeToValueChanges().subscribe(integer -> settingsChanged = true);
+        }
+    }
+
+    private void setupChangeDetection(SettingSwitch... settingSwitches) {
+        for (SettingSwitch settingSwitch : settingSwitches) {
+            settingSwitch.subscribeToValueChanges().subscribe(aBoolean -> settingsChanged = true);
+        }
+    }
+
     private void setupFlags() {
         abortOnPayment.subscribeToValueChanges().subscribe(value -> settingsProvider.abortOnPaymentError(value));
         abortOnFlow.subscribeToValueChanges().subscribe(value -> settingsProvider.abortOnFlowError(value));
@@ -121,6 +133,7 @@ public class SettingsFragment extends BaseFragment {
                 appScanner.reScanForPaymentAndFlowApps();
             }
         });
+        setupChangeDetection(abortOnPayment, abortOnFlow, allowStatusBar, useWebsocket, enableLegacySupport);
         abortOnPayment.setChecked(settingsProvider.shouldAbortOnPaymentAppError());
         abortOnFlow.setChecked(settingsProvider.shouldAbortOnFlowAppError());
         allowStatusBar.setChecked(settingsProvider.allowAccessViaStatusBar());
@@ -137,6 +150,7 @@ public class SettingsFragment extends BaseFragment {
                          integer -> settingsProvider.setPaymentResponseTimeoutSeconds(integer));
         setupEditTimeout(selectTimeout, settingsProvider.getAppOrDeviceSelectionTimeoutSeconds(),
                          integer -> settingsProvider.setAppOrDeviceSelectionTimeoutSeconds(integer));
+        setupChangeDetection(splitTimeout, flowResponseTimeout, paymentResponseTimeout, selectTimeout);
     }
 
     private void setupEditTimeout(EditTimeout editTimeout, int value, TimeoutChange timeoutChange) {
