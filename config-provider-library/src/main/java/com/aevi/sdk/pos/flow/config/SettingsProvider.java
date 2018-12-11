@@ -128,6 +128,15 @@ public class SettingsProvider {
         saveFpsSettings();
     }
 
+    public void setLegacyPaymentAppsEnabled(boolean legacyPaymentAppsEnabled) {
+        fpsSettings.setLegacyPaymentAppsEnabled(legacyPaymentAppsEnabled);
+        saveFpsSettings();
+    }
+
+    public boolean legacyPaymentAppsEnabled() {
+        return fpsSettings.legacyPaymentAppsEnabled();
+    }
+
     private void saveFpsSettings() {
         setString(KEY_FPS_SETTINGS, fpsSettings.toJson());
     }

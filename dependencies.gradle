@@ -17,12 +17,12 @@ ext {
     daggerVersion = '2.10'
     roomVersion = '1.0.0'
 
-    posFlowSdkVersion = '2.0.0-SNAPSHOT'
-    posFlowSdkConstants = '2.0.8'
+    posFlowSdkVersion = '2.0.0'
+    posFlowSdkConstants = '2.0.11'
     configApiVersion = '1.2.0'
-    aeviUiLibraryVersion = "1.4.0-SNAPSHOT"
-    paymentLegacyLibsVersion = '2.0.0-SNAPSHOT'
-    posFlowAppManagementVersion = '2.0.0-SNAPSHOT'
+    aeviUiLibraryVersion = "1.4.0"
+    paymentLegacyLibsVersion = '2.0.0'
+    posFlowAppManagementVersion = '2.0.0'
 
     presentationDependencies = [
 
