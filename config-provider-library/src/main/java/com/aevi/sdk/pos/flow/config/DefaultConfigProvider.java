@@ -13,15 +13,26 @@
  */
 package com.aevi.sdk.pos.flow.config;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.aevi.sdk.config.provider.BaseConfigProvider;
 import com.aevi.sdk.flow.model.config.ConfigStyles;
 import com.aevi.sdk.pos.flow.config.flowapps.FlowAppChangeReceiver;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
+
+import okio.Okio;
 
 import static com.aevi.sdk.flow.constants.config.ConfigStyleKeys.*;
 import static com.aevi.sdk.flow.constants.config.FlowConfigKeys.*;
@@ -33,6 +44,14 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     private static final String APPFLOW_COMMS_CHANNEL_KEY = "appFlowCommsChannel";
     private static final String LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST = "whitelist_OPERATOR";
 
+    private static final String[] DEFAULT_KEYS = new String[]{
+            FPS_CONFIG_KEY_FLOW_CONFIGS,
+            FPS_CONFIG_KEY_STYLES,
+            FPS_CONFIG_KEY_SETTINGS,
+            LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST,
+            APPFLOW_COMMS_CHANNEL_KEY
+    };
+
     private ProviderFlowConfigStore flowConfigStore;
 
     @Inject
@@ -41,23 +60,28 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     @Inject
     FlowAppChangeReceiver flowAppChangeReceiver;
 
+    private final List<String> CONFIG_KEYS = new ArrayList<>();
+
     @Override
     public boolean onCreate() {
         BaseConfigProviderApplication.getFpsConfigComponent().inject(this);
+        setupKeys();
         flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
         flowAppChangeReceiver.registerForBroadcasts();
         return super.onCreate();
     }
 
+    private void setupKeys() {
+        Collections.addAll(CONFIG_KEYS, DEFAULT_KEYS);
+    }
+
+    protected void addConfigKeys(String... keys) {
+        Collections.addAll(CONFIG_KEYS, keys);
+    }
+
     @Override
     public String[] getConfigKeys() {
-        return new String[]{
-                FPS_CONFIG_KEY_FLOW_CONFIGS,
-                FPS_CONFIG_KEY_STYLES,
-                FPS_CONFIG_KEY_SETTINGS,
-                LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST,
-                APPFLOW_COMMS_CHANNEL_KEY
-        };
+        return CONFIG_KEYS.toArray(new String[0]);
     }
 
     @Override
@@ -118,6 +142,25 @@ public class DefaultConfigProvider extends BaseConfigProvider {
         configStyles.setStyle(DIALOG_STYLE, DIALOG_STYLE_FULLSCREEN);
 
         return configStyles.toJson();
+    }
+
+    /**
+     * Method can be used to read a locally stored raw resource file
+     *
+     * @param resourceFile The id of the resource
+     * @return The file contents as a String
+     */
+    protected String readFile(int resourceFile) {
+        Context context = getContext();
+        if (context != null) {
+            try {
+                InputStream is = context.getResources().openRawResource(resourceFile);
+                return Okio.buffer(Okio.source(is)).readString(Charset.defaultCharset());
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to read config", e);
+            }
+        }
+        return "";
     }
 
     private String[] getWhitelist() {
