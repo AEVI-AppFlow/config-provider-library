@@ -22,9 +22,10 @@ import com.aevi.sdk.pos.flow.config.SettingsProvider;
 import com.aevi.sdk.pos.flow.config.StartUpReceiver;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
+import com.aevi.sdk.pos.flow.config.ui.AppFlowSettingsFragment;
 import com.aevi.sdk.pos.flow.config.ui.BaseConfigurationActivity;
 import com.aevi.sdk.pos.flow.config.ui.FlowConfigurationFragment;
-import com.aevi.sdk.pos.flow.config.ui.SettingsFragment;
+import com.aevi.sdk.pos.flow.config.ui.FpsSettingsFragment;
 
 import javax.inject.Singleton;
 
@@ -48,7 +49,7 @@ public interface FpsConfigComponent {
 
     void inject(FlowConfigurationFragment flowConfigurationFragment);
 
-    void inject(SettingsFragment settingsFragment);
+    void inject(FpsSettingsFragment fpsSettingsFragment);
 
     void inject(BaseConfigProviderApplication fpsConfig);
 
@@ -57,4 +58,6 @@ public interface FpsConfigComponent {
     void inject(BaseConfigurationActivity configurationActivity);
 
     void inject(StartUpReceiver startUpReceiver);
+
+    void inject(AppFlowSettingsFragment fragment);
 }

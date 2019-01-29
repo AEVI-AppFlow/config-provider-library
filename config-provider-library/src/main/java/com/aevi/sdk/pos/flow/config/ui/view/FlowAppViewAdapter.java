@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.R2;
-import com.aevi.ui.library.views.ItemTouchHelperAdapter;
-import com.aevi.ui.library.views.ItemTouchHelperViewHolder;
+import com.aevi.ui.library.view.ItemTouchHelperAdapter;
+import com.aevi.ui.library.view.ItemTouchHelperViewHolder;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -118,7 +118,8 @@ public class FlowAppViewAdapter extends AbstractListWithMenuAdapter<AppInfoModel
         objects = apps;
     }
 
-    class ViewHolder extends AbstractListWithMenuAdapter.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener, ItemTouchHelperViewHolder {
+    class ViewHolder extends AbstractListWithMenuAdapter.ViewHolder
+            implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener, ItemTouchHelperViewHolder {
 
         @BindView(R2.id.flow_app_bk)
         LinearLayout background;

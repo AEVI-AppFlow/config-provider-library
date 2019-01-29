@@ -19,7 +19,7 @@ public class StartUpReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        BaseConfigProviderApplication.getFpsConfigComponent().inject(this);
+        ConfigComponentProvider.getFpsConfigComponent().inject(this);
         flowAppChangeReceiver.registerForBroadcasts();
         // If we are re-installed, check if we should overwrite configs
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.MY_PACKAGE_REPLACED") &&

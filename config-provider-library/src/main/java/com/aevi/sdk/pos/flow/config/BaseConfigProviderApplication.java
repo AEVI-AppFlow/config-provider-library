@@ -13,7 +13,6 @@ import javax.inject.Inject;
 
 public abstract class BaseConfigProviderApplication extends Application {
 
-    protected static FpsConfigComponent fpsComponent;
     protected static ProviderFlowConfigStore flowConfigStore;
 
     @Inject
@@ -43,23 +42,17 @@ public abstract class BaseConfigProviderApplication extends Application {
         return flowConfigStore;
     }
 
-    public static SettingsProvider getSettingsProvider() {
-        return fpsComponent.provideSettingsProvider();
-    }
 
     private void scanForApps() {
         appEntityScanningHelper.reScanForPaymentAndFlowApps();
     }
 
     protected void setupDagger() {
-        fpsComponent = DaggerFpsConfigComponent.builder()
+        FpsConfigComponent fpsComponent = DaggerFpsConfigComponent.builder()
                 .fpsConfigModule(new FpsConfigModule(this))
                 .build();
-
         fpsComponent.inject(this);
+        ConfigComponentProvider.setFpsComponent(fpsComponent);
     }
 
-    public static FpsConfigComponent getFpsConfigComponent() {
-        return fpsComponent;
-    }
 }

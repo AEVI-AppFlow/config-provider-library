@@ -30,9 +30,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/general_title"/>
+
+                <com.aevi.ui.library.view.settings.SettingSwitch
+                    android:id="@+id/allow_status_bar_access"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:switchDefaultValue="true"
+                    app:switchSummary="@string/settings_allow_status_bar_summary"
+                    app:switchTitle="@string/settings_allow_status_bar"/>
+
+                <com.aevi.ui.library.view.settings.SettingIntegerInput
+                    android:id="@+id/database_row_limit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:editSuffix="@string/rows"
+                    app:editSummary="@string/settings_database_row_limit_summary"
+                    app:editTitle="@string/settings_database_row_limit"/>
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
                     android:text="@string/timeouts_title"/>
 
-                <com.aevi.ui.library.views.EditTimeout
+                <com.aevi.ui.library.view.settings.SettingIntegerInput
                     android:id="@+id/flow_response_timeout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,7 +66,7 @@
                     app:editSummary="@string/settings_flow_response_timeout_summary"
                     app:editTitle="@string/settings_flow_response_timeout"/>
 
-                <com.aevi.ui.library.views.EditTimeout
+                <com.aevi.ui.library.view.settings.SettingIntegerInput
                     android:id="@+id/payment_response_timeout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,7 +75,7 @@
                     app:editSummary="@string/settings_payment_response_timeout_summary"
                     app:editTitle="@string/settings_payment_response_timeout"/>
 
-                <com.aevi.ui.library.views.EditTimeout
+                <com.aevi.ui.library.view.settings.SettingIntegerInput
                     android:id="@+id/split_timeout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,7 +84,16 @@
                     app:editSummary="@string/settings_split_timeout_summary"
                     app:editTitle="@string/settings_split_timeout"/>
 
-                <com.aevi.ui.library.views.EditTimeout
+                <com.aevi.ui.library.view.settings.SettingIntegerInput
+                    android:id="@+id/status_update_timeout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:editSuffix="@string/seconds"
+                    app:editSummary="@string/settings_status_update_timeout_summary"
+                    app:editTitle="@string/settings_status_update_timeout"/>
+
+                <com.aevi.ui.library.view.settings.SettingIntegerInput
                     android:id="@+id/select_timeout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +109,7 @@
                     android:layout_marginBottom="@dimen/margin_vertical"
                     android:text="@string/flow_control_title"/>
 
-                <com.aevi.ui.library.views.SettingSwitch
+                <com.aevi.ui.library.view.settings.SettingSwitch
                     android:id="@+id/abort_on_flow_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,7 +118,7 @@
                     app:switchSummary="@string/settings_abort_flow_app_summary"
                     app:switchTitle="@string/settings_abort_flow_app"/>
 
-                <com.aevi.ui.library.views.SettingSwitch
+                <com.aevi.ui.library.view.settings.SettingSwitch
                     android:id="@+id/abort_on_payment_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,16 +127,32 @@
                     app:switchSummary="@string/settings_abort_payment_app_summary"
                     app:switchTitle="@string/settings_abort_payment_app"/>
 
-                <com.aevi.ui.library.views.SettingSwitch
-                    android:id="@+id/allow_status_bar_access"
+                <com.aevi.ui.library.view.settings.SettingSwitch
+                    android:id="@+id/filter_flow_services_by_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_vertical"
-                    app:switchDefaultValue="true"
-                    app:switchSummary="@string/settings_allow_status_bar_summary"
-                    app:switchTitle="@string/settings_allow_status_bar"/>
+                    app:switchDefaultValue="false"
+                    app:switchSummary="@string/settings_filter_flow_services_by_type_summary"
+                    app:switchTitle="@string/settings_filter_flow_services_by_type"/>
 
-                <com.aevi.ui.library.views.SettingSwitch
+                <com.aevi.ui.library.view.settings.SettingSwitch
+                    android:id="@+id/always_call_preflow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:switchDefaultValue="false"
+                    app:switchSummary="@string/settings_always_call_preflow_summary"
+                    app:switchTitle="@string/settings_always_call_preflow"/>
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/feature_toggles_title"/>
+
+                <com.aevi.ui.library.view.settings.SettingSwitch
                     android:id="@+id/enable_legacy_pa_support"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,28 +161,24 @@
                     app:switchSummary="@string/settings_enable_legacy_pa_support_summary"
                     app:switchTitle="@string/settings_enable_legacy_pa_support"/>
 
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
-                    android:text="@string/experimental_features_title"/>
-
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
-                    android:text="@string/warning_experimental"/>
-
-                <com.aevi.ui.library.views.SettingSwitch
-                    android:id="@+id/use_websocket"
+                <com.aevi.ui.library.view.settings.SettingSwitch
+                    android:id="@+id/multi_device_support"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_vertical"
                     app:switchDefaultValue="false"
-                    app:switchSummary="@string/settings_use_websocket_summary"
-                    app:switchTitle="@string/settings_use_websocket"/>
+                    app:switchSummary="@string/settings_multi_device_summary"
+                    app:switchTitle="@string/settings_multi_device"/>
+
+                <com.aevi.ui.library.view.settings.SettingSwitch
+                    android:id="@+id/currency_conversion_support"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:switchDefaultValue="false"
+                    app:switchSummary="@string/settings_currency_conversion_summary"
+                    app:switchTitle="@string/settings_currency_conversion"/>
+
             </LinearLayout>
         </ScrollView>
     </android.support.v7.widget.CardView>

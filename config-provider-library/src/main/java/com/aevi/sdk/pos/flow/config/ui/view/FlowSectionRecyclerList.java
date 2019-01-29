@@ -26,10 +26,10 @@ import android.widget.TextView;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 import com.aevi.sdk.flow.model.config.FlowStage;
-import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
+import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.R2;
-import com.aevi.ui.library.views.SimpleItemTouchHelperCallback;
+import com.aevi.ui.library.view.SimpleItemTouchHelperCallback;
 
 import java.util.List;
 
