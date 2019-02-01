@@ -106,7 +106,7 @@ public class FlowConfigurationFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BaseConfigProviderApplication.getFpsConfigComponent().inject(this);
+        ConfigComponentProvider.getFpsConfigComponent().inject(this);
         flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
         setRetainInstance(true);
         preferences = getContext().getSharedPreferences(KEY_POS_STORE, Context.MODE_PRIVATE);

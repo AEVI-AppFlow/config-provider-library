@@ -57,7 +57,7 @@ public class ProviderAppScanner {
 
     public void reScanForPaymentAndFlowApps() {
         LogcatAudit logcatAudit = new LogcatAudit();
-        if (settingsProvider.legacyPaymentAppsEnabled()) {
+        if (settingsProvider.getFpsSettings().legacyPaymentAppsEnabled()) {
             Observable.merge(flowServiceScanner.scan(logcatAudit), legacyPaymentAppScanner.scan(logcatAudit)).toList().subscribe(this::handleApps);
         } else {
             flowServiceScanner.scan(logcatAudit).toList().subscribe(this::handleApps);

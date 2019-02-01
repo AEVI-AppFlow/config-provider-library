@@ -41,7 +41,6 @@ import static com.aevi.sdk.flow.constants.config.FlowConfigKeys.*;
 public class DefaultConfigProvider extends BaseConfigProvider {
 
     private static final String TAG = DefaultConfigProvider.class.getSimpleName();
-    private static final String APPFLOW_COMMS_CHANNEL_KEY = "appFlowCommsChannel";
     private static final String LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST = "whitelist_OPERATOR";
 
     private static final String[] DEFAULT_KEYS = new String[]{
@@ -49,7 +48,7 @@ public class DefaultConfigProvider extends BaseConfigProvider {
             FPS_CONFIG_KEY_STYLES,
             FPS_CONFIG_KEY_SETTINGS,
             LAUNCHER_CONFIG_KEY_OPERATOR_WHITELIST,
-            APPFLOW_COMMS_CHANNEL_KEY
+            APPFLOW_CONFIG_KEY_SETTINGS
     };
 
     private ProviderFlowConfigStore flowConfigStore;
@@ -64,7 +63,7 @@ public class DefaultConfigProvider extends BaseConfigProvider {
 
     @Override
     public boolean onCreate() {
-        BaseConfigProviderApplication.getFpsConfigComponent().inject(this);
+        ConfigComponentProvider.getFpsConfigComponent().inject(this);
         setupKeys();
         flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
         flowAppChangeReceiver.registerForBroadcasts();
@@ -90,9 +89,9 @@ public class DefaultConfigProvider extends BaseConfigProvider {
             case FPS_CONFIG_KEY_STYLES:
                 return getStyleConfig();
             case FPS_CONFIG_KEY_SETTINGS:
-                return getFpsSettings();
-            case APPFLOW_COMMS_CHANNEL_KEY:
-                return settingsProvider.getCommsChannel();
+                return settingsProvider.getFpsSettings().toJson();
+            case APPFLOW_CONFIG_KEY_SETTINGS:
+                return settingsProvider.getAppFlowSettings().toJson();
         }
         return "";
     }
@@ -123,10 +122,6 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     @Override
     protected String getVendorName() {
         return "AEVI";
-    }
-
-    private String getFpsSettings() {
-        return settingsProvider.getFpsSettings().toJson();
     }
 
     private String getStyleConfig() {

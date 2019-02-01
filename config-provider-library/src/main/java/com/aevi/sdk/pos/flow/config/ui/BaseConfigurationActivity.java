@@ -28,7 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
 import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.R2;
@@ -62,7 +62,7 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BaseConfigProviderApplication.getFpsConfigComponent().inject(this);
+        ConfigComponentProvider.getFpsConfigComponent().inject(this);
 
         setContentView(R.layout.activity_configuration);
         ButterKnife.bind(this);
@@ -108,7 +108,6 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -139,10 +138,16 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
     protected Fragment getFragmentForId(int menuId) {
         if (menuId == R.id.menu_flow_configuration) {
             setRefreshMenuVisible(true);
+            toolbar.setTitle(R.string.app_name);
             return FlowConfigurationFragment.create(getAppColorList());
+        } else if (menuId == R.id.menu_fps_settings) {
+            setRefreshMenuVisible(false);
+            toolbar.setTitle(R.string.fps_settings);
+            return new FpsSettingsFragment();
         } else {
             setRefreshMenuVisible(false);
-            return new SettingsFragment();
+            toolbar.setTitle(R.string.appflow_settings);
+            return new AppFlowSettingsFragment();
         }
     }
 

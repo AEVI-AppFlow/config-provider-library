@@ -18,7 +18,6 @@ import android.content.Context;
 
 import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 
 import javax.inject.Singleton;
 
@@ -30,7 +29,7 @@ public class FpsConfigModule {
 
     private final Application application;
 
-    public FpsConfigModule(BaseConfigProviderApplication application) {
+    public FpsConfigModule(Application application) {
         this.application = application;
     }
 

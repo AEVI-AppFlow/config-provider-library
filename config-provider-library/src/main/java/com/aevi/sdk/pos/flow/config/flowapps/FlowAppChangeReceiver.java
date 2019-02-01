@@ -16,7 +16,7 @@ package com.aevi.sdk.pos.flow.config.flowapps;
 import android.content.Context;
 
 import com.aevi.sdk.app.scanning.listener.AppChangeReceiver;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,9 +28,9 @@ public class FlowAppChangeReceiver extends AppChangeReceiver {
     private final Context context;
 
     public FlowAppChangeReceiver() {
-        super(BaseConfigProviderApplication.getFpsConfigComponent().provideAppDatabase());
-        this.appEntityScanningHelper = BaseConfigProviderApplication.getFpsConfigComponent().provideAppEntityScanningHelper();
-        this.context = BaseConfigProviderApplication.getFpsConfigComponent().provideApplicationContext();
+        super(ConfigComponentProvider.getFpsConfigComponent().provideAppDatabase());
+        this.appEntityScanningHelper = ConfigComponentProvider.getFpsConfigComponent().provideAppEntityScanningHelper();
+        this.context = ConfigComponentProvider.getFpsConfigComponent().provideApplicationContext();
     }
 
     @Inject
