@@ -13,16 +13,14 @@ import javax.inject.Inject;
 
 public abstract class BaseConfigProviderApplication extends Application {
 
-    protected static ProviderFlowConfigStore flowConfigStore;
-
     @Inject
     ProviderAppScanner appEntityScanningHelper;
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        setupFlowConfigs();
         setupDagger();
+        setupFlowConfigs();
         onComponentsReady();
         scanForApps();
     }
@@ -33,15 +31,11 @@ public abstract class BaseConfigProviderApplication extends Application {
     }
 
     private void setupFlowConfigs() {
-        flowConfigStore = new ProviderFlowConfigStore(this, getFlowConfigs());
+        ProviderFlowConfigStore providerFlowConfigStore = ConfigComponentProvider.getProviderFlowConfigStore();
+        providerFlowConfigStore.init(getFlowConfigs());
     }
 
-    protected abstract int[] getFlowConfigs();
-
-    public static ProviderFlowConfigStore getFlowConfigStore() {
-        return flowConfigStore;
-    }
-
+    public abstract int[] getFlowConfigs();
 
     private void scanForApps() {
         appEntityScanningHelper.reScanForPaymentAndFlowApps();
@@ -53,6 +47,7 @@ public abstract class BaseConfigProviderApplication extends Application {
                 .build();
         fpsComponent.inject(this);
         ConfigComponentProvider.setFpsComponent(fpsComponent);
+        ConfigComponentProvider.setConfigProviderApplication(this);
     }
 
 }

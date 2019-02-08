@@ -19,33 +19,50 @@ import android.util.Log;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 import com.aevi.sdk.flow.model.config.*;
+import com.aevi.sdk.pos.flow.PaymentApi;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
+import com.aevi.sdk.pos.flow.config.SettingsProvider;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okio.BufferedSink;
 import okio.Okio;
 
+@Singleton
 public class ProviderFlowConfigStore {
 
     private static final String TAG = ProviderFlowConfigStore.class.getSimpleName();
 
     private final Context context;
+    private final SettingsProvider settingsProvider;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private static final String CONFIG_FILE_NAME = "_flow_config.json";
 
     private Set<String> allFlowTypes;
     private Set<String> allFlowNames;
 
-    private final int[] defaultFlowConfigs;
+    private int[] defaultFlowConfigs;
 
-    public ProviderFlowConfigStore(Context context, int[] defaultFlowConfigs) {
+    @Inject
+    public ProviderFlowConfigStore(Context context, SettingsProvider settingsProvider) {
         this.context = context;
-        this.defaultFlowConfigs = defaultFlowConfigs;
+        this.settingsProvider = settingsProvider;
         allFlowTypes = new HashSet<>();
         allFlowNames = new HashSet<>();
+    }
+
+    private void setDefaultFlowConfigs(int[] defaultFlowConfigs) {
+        this.defaultFlowConfigs = defaultFlowConfigs;
+    }
+
+    public void init(int[] defaultFlowConfigs) {
+        setDefaultFlowConfigs(defaultFlowConfigs);
         if (hasStoredConfigs()) {
             Log.d(TAG, "Found stored configs - parsing");
             parseStoredFlowConfigs();
@@ -65,6 +82,8 @@ public class ProviderFlowConfigStore {
             Log.e(TAG, "Failed to write defaults", e);
         } finally {
             lock.writeLock().unlock();
+            String fpsVersion = PaymentApi.getProcessingServiceVersion(context);
+            settingsProvider.setFpsVersionUsedForStoredConfigs(fpsVersion);
         }
     }
 
@@ -283,7 +302,20 @@ public class ProviderFlowConfigStore {
         return "";
     }
 
+    private void checkFpsVersion() {
+        String fpsVersionLastUsed = settingsProvider.getFpsVersionUsedForStoredConfigs();
+        String fpsVersion = PaymentApi.getProcessingServiceVersion(context);
+        if (fpsVersionLastUsed != null) {
+            if (!fpsVersionLastUsed.substring(0, 3).equals(fpsVersion.substring(0, 3))) {
+                Log.i(TAG, "FPS major/minor version has changed since we stored defaults - clearing back to new defaults");
+                setDefaultFlowConfigs(ConfigComponentProvider.getConfigProviderApplication().getFlowConfigs());
+                resetFlowConfigs();
+            }
+        }
+    }
+
     public String[] getAllFlowConfigs() {
+        checkFpsVersion();
         lock.readLock().lock();
         try {
             String[] flowConfigs = new String[allFlowNames.size()];

@@ -20,7 +20,6 @@ import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.audit.LogcatAudit;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
 import com.aevi.sdk.pos.flow.config.SettingsProvider;
 
@@ -45,12 +44,12 @@ public class ProviderAppScanner {
 
     @Inject
     public ProviderAppScanner(ProviderAppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner,
-                              LegacyPaymentAppScanner legacyPaymentAppScanner,
+                              LegacyPaymentAppScanner legacyPaymentAppScanner, ProviderFlowConfigStore providerFlowConfigStore,
                               Context appContext, SettingsProvider settingsProvider) {
         this.appDatabase = appDatabase;
         this.flowServiceScanner = flowServiceScanner;
         this.legacyPaymentAppScanner = legacyPaymentAppScanner;
-        this.flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
+        this.flowConfigStore = providerFlowConfigStore;
         this.appContext = appContext;
         this.settingsProvider = settingsProvider;
     }

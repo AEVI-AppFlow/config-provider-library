@@ -77,13 +77,14 @@ public class FlowConfigurationFragment extends BaseFragment {
     @BindView(R2.id.auto_switch)
     Switch autoModeSwitch;
 
-    private ProviderFlowConfigStore flowConfigStore;
-
     @Inject
     ProviderAppDatabase appDatabase;
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    ProviderFlowConfigStore flowConfigStore;
 
     @Override
     public int getLayoutResource() {
@@ -107,7 +108,6 @@ public class FlowConfigurationFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ConfigComponentProvider.getFpsConfigComponent().inject(this);
-        flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
         setRetainInstance(true);
         preferences = getContext().getSharedPreferences(KEY_POS_STORE, Context.MODE_PRIVATE);
 

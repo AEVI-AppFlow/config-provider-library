@@ -21,6 +21,7 @@ public class SettingsProvider {
 
     private static final String KEY_AUTO_GENERATE_CONFIGS = "autoGenerateConfigs";
     private static final String KEY_OVERWRITE_CONFIGS_ON_REINSTALL = "overwriteConfigsOnReinstall";
+    private static final String KEY_CONFIGS_FOR_FPS_VERSION = "configsForFpsVersion";
 
     private PublishSubject<SettingsProvider> settingsChangeSubject = PublishSubject.create();
 
@@ -83,6 +84,14 @@ public class SettingsProvider {
             return new AppFlowSettings();
         }
         return AppFlowSettings.fromJson(val);
+    }
+
+    public String getFpsVersionUsedForStoredConfigs() {
+        return getString(KEY_CONFIGS_FOR_FPS_VERSION, null);
+    }
+
+    public void setFpsVersionUsedForStoredConfigs(String version) {
+        setString(KEY_CONFIGS_FOR_FPS_VERSION, version);
     }
 
     public String getString(String key, String defaultValue) {

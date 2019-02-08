@@ -14,10 +14,12 @@
 package com.aevi.sdk.pos.flow.config;
 
 import com.aevi.sdk.pos.flow.config.dagger.FpsConfigComponent;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 
 public class ConfigComponentProvider {
 
     private static FpsConfigComponent fpsComponent;
+    private static BaseConfigProviderApplication configProviderApplication;
 
     public static void setFpsComponent(FpsConfigComponent component) {
         fpsComponent = component;
@@ -29,5 +31,17 @@ public class ConfigComponentProvider {
 
     public static SettingsProvider getSettingsProvider() {
         return fpsComponent.provideSettingsProvider();
+    }
+
+    public static BaseConfigProviderApplication getConfigProviderApplication() {
+        return configProviderApplication;
+    }
+
+    public static void setConfigProviderApplication(BaseConfigProviderApplication configProviderApplication) {
+        ConfigComponentProvider.configProviderApplication = configProviderApplication;
+    }
+
+    public static ProviderFlowConfigStore getProviderFlowConfigStore() {
+        return fpsComponent.provideProviderFlowConfigStore();
     }
 }

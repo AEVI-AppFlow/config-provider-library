@@ -22,6 +22,7 @@ import com.aevi.sdk.pos.flow.config.SettingsProvider;
 import com.aevi.sdk.pos.flow.config.StartUpReceiver;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 import com.aevi.sdk.pos.flow.config.ui.AppFlowSettingsFragment;
 import com.aevi.sdk.pos.flow.config.ui.BaseConfigurationActivity;
 import com.aevi.sdk.pos.flow.config.ui.FlowConfigurationFragment;
@@ -46,6 +47,8 @@ public interface FpsConfigComponent {
     ProviderAppDatabase provideAppDatabase();
 
     SettingsProvider provideSettingsProvider();
+
+    ProviderFlowConfigStore provideProviderFlowConfigStore();
 
     void inject(FlowConfigurationFragment flowConfigurationFragment);
 
