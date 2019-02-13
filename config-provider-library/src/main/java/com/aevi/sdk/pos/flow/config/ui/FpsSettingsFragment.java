@@ -21,9 +21,9 @@ import com.aevi.sdk.flow.model.config.FpsSettings;
 import com.aevi.sdk.pos.flow.config.*;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
+import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingIntegerInput;
+import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch;
 import com.aevi.ui.library.view.settings.SettingControl;
-import com.aevi.ui.library.view.settings.SettingIntegerInput;
-import com.aevi.ui.library.view.settings.SettingSwitch;
 
 import javax.inject.Inject;
 
@@ -37,46 +37,46 @@ public class FpsSettingsFragment extends BaseFragment {
     private static final int ROW_LIMIT_MAX = 10000;
 
     @BindView(R2.id.split_timeout)
-    SettingIntegerInput splitTimeout;
+    ConfigSettingIntegerInput splitTimeout;
 
     @BindView(R2.id.flow_response_timeout)
-    SettingIntegerInput flowResponseTimeout;
+    ConfigSettingIntegerInput flowResponseTimeout;
 
     @BindView(R2.id.payment_response_timeout)
-    SettingIntegerInput paymentResponseTimeout;
+    ConfigSettingIntegerInput paymentResponseTimeout;
 
     @BindView(R2.id.select_timeout)
-    SettingIntegerInput selectTimeout;
+    ConfigSettingIntegerInput selectTimeout;
 
     @BindView(R2.id.status_update_timeout)
-    SettingIntegerInput statusUpdateTimeout;
+    ConfigSettingIntegerInput statusUpdateTimeout;
 
     @BindView(R2.id.database_row_limit)
-    SettingIntegerInput databaseRowLimit;
+    ConfigSettingIntegerInput databaseRowLimit;
 
     @BindView(R2.id.abort_on_flow_error)
-    SettingSwitch abortOnFlow;
+    ConfigSettingSwitch abortOnFlow;
 
     @BindView(R2.id.abort_on_payment_error)
-    SettingSwitch abortOnPayment;
+    ConfigSettingSwitch abortOnPayment;
 
     @BindView(R2.id.allow_status_bar_access)
-    SettingSwitch allowStatusBar;
+    ConfigSettingSwitch allowStatusBar;
 
     @BindView(R2.id.enable_legacy_pa_support)
-    SettingSwitch enableLegacySupport;
+    ConfigSettingSwitch enableLegacySupport;
 
     @BindView(R2.id.multi_device_support)
-    SettingSwitch multiDeviceSupport;
+    ConfigSettingSwitch multiDeviceSupport;
 
     @BindView(R2.id.currency_conversion_support)
-    SettingSwitch currencyConversionSupport;
+    ConfigSettingSwitch currencyConversionSupport;
 
     @BindView(R2.id.filter_flow_services_by_type)
-    SettingSwitch filterFlowServices;
+    ConfigSettingSwitch filterFlowServices;
 
     @BindView(R2.id.always_call_preflow)
-    SettingSwitch alwaysCallPreFlow;
+    ConfigSettingSwitch alwaysCallPreFlow;
 
     @Inject
     SettingsProvider settingsProvider;
@@ -159,7 +159,7 @@ public class FpsSettingsFragment extends BaseFragment {
         currencyConversionSupport.setEnabled(false);
     }
 
-    private void setupSwitch(SettingSwitch settingSwitch, boolean initialValue, Consumer<Boolean> valueChangeConsumer) {
+    private void setupSwitch(ConfigSettingSwitch settingSwitch, boolean initialValue, Consumer<Boolean> valueChangeConsumer) {
         settingSwitch.setChecked(initialValue);
         settingSwitch.subscribeToValueChanges().subscribe(value -> {
             valueChangeConsumer.accept(value);
@@ -192,7 +192,7 @@ public class FpsSettingsFragment extends BaseFragment {
                           integer -> fpsSettings.setDatabaseRowLimit(integer));
     }
 
-    private void setupIntegerInput(SettingIntegerInput integerInput, int value, int maxValue, Consumer<Integer> valueChangedConsumer) {
+    private void setupIntegerInput(ConfigSettingIntegerInput integerInput, int value, int maxValue, Consumer<Integer> valueChangedConsumer) {
         integerInput.setMinMax(0, maxValue);
         integerInput.setInitialValue(value);
         integerInput.subscribeToValueChanges().subscribe(value1 -> {

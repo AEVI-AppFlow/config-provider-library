@@ -20,7 +20,7 @@ ext {
     posFlowSdkVersion = '2.1.0-SNAPSHOT'
     posFlowSdkConstants = '2.0.16'
     configApiVersion = '1.2.0'
-    aeviUiLibraryVersion = "2.0.0-SNAPSHOT"
+    aeviUiLibraryVersion = "2.0.1-SNAPSHOT"
     paymentLegacyLibsVersion = '2.1.0-SNAPSHOT'
     posFlowAppManagementVersion = '2.1.0-SNAPSHOT'
 
