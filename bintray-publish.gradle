@@ -1,4 +1,5 @@
-apply plugin: 'maven-publish'
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 task sourcesJar(type: Jar) {
@@ -6,12 +7,21 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
 
-def siteUrl = 'https://github.com/Aevi-UK/android-ui-library'
-def gitUrl = 'https://github.com/Aevi-UK/android-ui-library.git'// Create the pom configuration:
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+def siteUrl = 'https://github.com/AEVI-AppFlow/config-provider-library'
+def gitUrl = 'https://github.com/AEVI-AppFlow/config-provider-library.git'
 
 def pomConfig = {
-    name 'AeviConfigurationApi'
+    name 'AeviConfigProviderLibrary'
     url siteUrl
     licenses {
         license {
@@ -26,12 +36,9 @@ def pomConfig = {
             email 'brett@annalytics.co.uk'
         }
         developer {
-            id 'xdevl'
-            name 'Xavier Raux'
-        }
-        developer {
             id 'andreas-borglin'
             name 'Andreas Borglin'
+            email 'andreas@jakoon.co.uk'
         }
     }
     scm {
@@ -43,6 +50,7 @@ def pomConfig = {
 
 artifacts {
     archives sourcesJar
+    archives javadocJar
 }
 
 publishing {
@@ -86,12 +94,12 @@ bintray {
         dryRun = false
         publish = true
         repo = 'aevi-uk'
-        name = 'android-ui-library'
+        name = 'config-provider-library'
         userOrg = 'aevi'
         licenses = ['Apache-2.0']
         labels = ['android']
         websiteUrl = siteUrl
-        issueTrackerUrl = 'https://github.com/Aevi-UK/android-ui-library/issues'
+        issueTrackerUrl = 'https://github.com/AEVI-AppFlow/config-provider-library/issues'
         vcsUrl = gitUrl
         publicDownloadNumbers = true
     }
