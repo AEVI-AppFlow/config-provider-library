@@ -6,6 +6,7 @@ import android.content.Context;
 import com.aevi.sdk.pos.flow.config.dagger.DaggerFpsConfigComponent;
 import com.aevi.sdk.pos.flow.config.dagger.FpsConfigComponent;
 import com.aevi.sdk.pos.flow.config.dagger.FpsConfigModule;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 
@@ -13,7 +14,7 @@ import javax.inject.Inject;
 
 public abstract class BaseConfigProviderApplication extends Application {
 
-    protected static ProviderFlowConfigStore flowConfigStore;
+    private ProviderFlowConfigStore flowConfigStore;
 
     @Inject
     ProviderAppScanner appEntityScanningHelper;
@@ -38,18 +39,13 @@ public abstract class BaseConfigProviderApplication extends Application {
 
     protected abstract int[] getFlowConfigs();
 
-    public static ProviderFlowConfigStore getFlowConfigStore() {
-        return flowConfigStore;
-    }
-
-
     private void scanForApps() {
         appEntityScanningHelper.reScanForPaymentAndFlowApps();
     }
 
     protected void setupDagger() {
         FpsConfigComponent fpsComponent = DaggerFpsConfigComponent.builder()
-                .fpsConfigModule(new FpsConfigModule(this))
+                .fpsConfigModule(new FpsConfigModule(this, flowConfigStore, new ProviderAppDatabase(this)))
                 .build();
         fpsComponent.inject(this);
         ConfigComponentProvider.setFpsComponent(fpsComponent);

@@ -11,10 +11,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.aevi.sdk.pos.flow.config.model;
+package com.aevi.sdk.pos.flow.config.flowapps;
 
-public interface Channels {
+import com.aevi.sdk.app.scanning.model.AppInfoModel;
 
-    String MESSENGER = "messenger";
-    String WEBSOCKET = "websocket";
+import java.util.List;
+
+import io.reactivex.Observable;
+
+/**
+ * Application provider interface to allow re-use of flow config UI.
+ */
+public interface AppProvider {
+
+    /**
+     * Subscribe to app updates.
+     *
+     * @return Stream of apps
+     */
+    Observable<List<AppInfoModel>> subscribeToAppUpdates();
+
+    /**
+     * Get all current apps.
+     *
+     * @return List of all current apps
+     */
+    List<AppInfoModel> getAll();
 }

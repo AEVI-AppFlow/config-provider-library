@@ -47,6 +47,9 @@ dependencies {
     implementation domainDependencies.paymentLegacyAppUtils
     implementation domainDependencies.aeviUiLibrary
 
+    implementation presentationDependencies.flexibleAdapter
+    implementation presentationDependencies.flexibleAdapterUi
+
     implementation presentationDependencies.butterKnife
     annotationProcessor aptDependencies.butterKnife
 

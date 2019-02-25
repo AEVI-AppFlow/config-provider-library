@@ -4,9 +4,11 @@
           style="?android:attr/spinnerItemStyle"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:drawableEnd="@drawable/spinner_dd_icon"
+          android:layout_gravity="center_vertical"
+          android:background="@android:color/transparent"
+          android:drawableEnd="@drawable/spinner_arrow"
           android:paddingLeft="@dimen/margin_horizontal"
           android:singleLine="true"
           android:textAlignment="inherit"
-          android:textAllCaps="false"
+          android:textColor="@color/colorPrimaryDark"
           android:textSize="@dimen/spinner_text_size"/>

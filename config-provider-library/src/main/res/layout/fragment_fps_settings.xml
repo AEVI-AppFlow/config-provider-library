@@ -5,7 +5,7 @@
                 android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
-        android:layout_width="640dp"
+        android:layout_width="@dimen/card_view_width"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true">
 
@@ -26,10 +26,20 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/read_only_note"
+                    style="@style/ConfigGeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/read_only_note"
+                    android:visibility="gone"/>
+
+                <TextView
                     style="@style/ConfigSectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
                     android:text="@string/general_title"/>
 
                 <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
@@ -54,7 +64,7 @@
                     style="@style/ConfigSectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
                     android:text="@string/timeouts_title"/>
 
                 <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingIntegerInput
@@ -106,7 +116,7 @@
                     style="@style/ConfigSectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
                     android:text="@string/flow_control_title"/>
 
                 <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
@@ -149,7 +159,7 @@
                     style="@style/ConfigSectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
                     android:text="@string/feature_toggles_title"/>
 
                 <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="@dimen/margin_vertical"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/title_bar"
+        style="@style/FlowActivityDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/margin_vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/FlowActivityDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+
+    </FrameLayout>
+
+    <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
+        android:id="@+id/mandatory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_horizontal"
+        android:layout_marginRight="@dimen/margin_horizontal"
+        android:layout_marginBottom="@dimen/margin_vertical"
+        app:switchDefaultValue="false"
+        app:switchSummary="@string/settings_mandatory_app"
+        app:switchTitle="@string/settings_mandatory_app_title"/>
+
+    <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
+        android:id="@+id/conditional_on"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_horizontal"
+        android:layout_marginRight="@dimen/margin_horizontal"
+        android:layout_marginBottom="@dimen/margin_vertical"
+        app:editMaxChars="25"
+        app:editSuffix=""
+        app:editSummary="@string/settings_conditional_on"
+        app:editTitle="@string/settings_conditional_on_title"/>
+
+    <Button
+        android:id="@+id/finish_button"
+        style="@style/DefaultButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginBottom="@dimen/margin_vertical"
+        android:text="@string/finish"/>
+
+</LinearLayout>

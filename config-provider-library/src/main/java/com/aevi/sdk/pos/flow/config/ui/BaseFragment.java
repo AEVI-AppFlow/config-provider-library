@@ -88,9 +88,7 @@ public abstract class BaseFragment extends Fragment {
         return configuration.screenWidthDp >= 600;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    protected void disposeAll() {
         if (disposables != null) {
             for (Disposable disposable : disposables) {
                 if (disposable != null) {
@@ -108,5 +106,11 @@ public abstract class BaseFragment extends Fragment {
             }
             subscriptions.clear();
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        disposeAll();
     }
 }

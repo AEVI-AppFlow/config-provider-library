@@ -18,6 +18,10 @@ import android.content.Context;
 
 import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
+import com.aevi.sdk.pos.flow.config.flowapps.AppProvider;
+import com.aevi.sdk.pos.flow.config.flowapps.FlowProvider;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 
 import javax.inject.Singleton;
 
@@ -28,9 +32,40 @@ import dagger.Provides;
 public class FpsConfigModule {
 
     private final Application application;
+    private final FlowProvider flowProvider;
+    private final AppProvider appProvider;
 
-    public FpsConfigModule(Application application) {
+    public FpsConfigModule(Application application, FlowProvider flowProvider, AppProvider appProvider) {
         this.application = application;
+        this.flowProvider = flowProvider;
+        this.appProvider = appProvider;
+    }
+
+    @Provides
+    @Singleton
+    ProviderFlowConfigStore provideProviderFlowConfigStore() {
+        if (flowProvider instanceof ProviderFlowConfigStore) {
+            return (ProviderFlowConfigStore) flowProvider;
+        }
+        return new ProviderFlowConfigStore(application, new int[0]);
+    }
+
+    @Provides
+    @Singleton
+    FlowProvider provideFlowProvider() {
+        return flowProvider;
+    }
+
+    @Provides
+    @Singleton
+    AppProvider provideAppProvider() {
+        return appProvider;
+    }
+
+    @Provides
+    @Singleton
+    ProviderAppDatabase provideProviderAppDatabase() {
+        return (ProviderAppDatabase) appProvider;
     }
 
     @Provides

@@ -17,6 +17,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
 
 import com.aevi.sdk.flow.model.config.AppFlowSettings;
 import com.aevi.sdk.pos.flow.config.*;
@@ -54,6 +56,9 @@ public class AppFlowSettingsFragment extends BaseFragment {
     @BindView(R2.id.use_websocket)
     SettingSwitch useWebsocket;
 
+    @BindView(R2.id.read_only_note)
+    TextView readOnlyNote;
+
     @Inject
     Context appContext;
 
@@ -85,12 +90,13 @@ public class AppFlowSettingsFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         setupGeneral();
         setupExperimental();
         if (readOnlyMode) {
             setReadOnlyMode();
+            readOnlyNote.setVisibility(View.VISIBLE);
         }
     }
 

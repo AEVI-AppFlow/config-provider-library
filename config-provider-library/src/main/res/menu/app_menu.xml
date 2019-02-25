@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/flow_config_settings"
+        android:visible="true">
+        <item
+            android:id="@+id/settings_flow_menu"
+            android:icon="@drawable/ic_settings_white_24dp"
+            android:title="@string/menu_settings"
+            android:visible="true"
+            app:showAsAction="ifRoom"/>
+    </group>
+</menu>

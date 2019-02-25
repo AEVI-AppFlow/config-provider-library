@@ -16,11 +16,11 @@ package com.aevi.sdk.pos.flow.config.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
 
 import com.aevi.sdk.flow.model.config.FpsSettings;
 import com.aevi.sdk.pos.flow.config.*;
-import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
-import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingIntegerInput;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch;
 import com.aevi.ui.library.view.settings.SettingControl;
@@ -78,17 +78,14 @@ public class FpsSettingsFragment extends BaseFragment {
     @BindView(R2.id.always_call_preflow)
     ConfigSettingSwitch alwaysCallPreFlow;
 
+    @BindView(R2.id.read_only_note)
+    TextView readOnlyNote;
+
     @Inject
     SettingsProvider settingsProvider;
 
     @Inject
     Context appContext;
-
-    @Inject
-    ProviderAppDatabase appDatabase;
-
-    @Inject
-    ProviderAppScanner appScanner;
 
     private FpsSettings fpsSettings;
     private boolean hasChanges;
@@ -121,14 +118,15 @@ public class FpsSettingsFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         setupNumericInput();
         setupSwitches();
         if (readOnlyMode) {
             setReadOnly(splitTimeout, paymentResponseTimeout, flowResponseTimeout, selectTimeout, abortOnFlow, abortOnPayment,
                         allowStatusBar, enableLegacySupport, statusUpdateTimeout, multiDeviceSupport, currencyConversionSupport,
                         filterFlowServices, alwaysCallPreFlow, databaseRowLimit);
+            readOnlyNote.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,8 +170,8 @@ public class FpsSettingsFragment extends BaseFragment {
         fpsSettings.setLegacyPaymentAppsEnabled(enable);
         settingsProvider.saveFpsSettings(fpsSettings);
         if (!enable) {
-            appDatabase.clearApps();
-            appScanner.reScanForPaymentAndFlowApps();
+            ConfigComponentProvider.getFpsConfigComponent().provideAppDatabase().clearApps();
+            ConfigComponentProvider.getFpsConfigComponent().provideAppScanner().reScanForPaymentAndFlowApps();
         }
     }
 

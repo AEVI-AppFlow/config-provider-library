@@ -16,11 +16,13 @@ ext {
 
     daggerVersion = '2.10'
     roomVersion = '1.0.0'
+    flexibleAdapterVersion = '5.0.6'
+    flexibleAdapterUiVersion = '1.0.0-b5'
 
     posFlowSdkVersion = '2.1.0-SNAPSHOT'
     posFlowSdkConstants = '2.1.0'
     configApiVersion = '1.2.0'
-    aeviUiLibraryVersion = "2.0.1-SNAPSHOT"
+    aeviUiLibraryVersion = "2.0.3-SNAPSHOT"
     paymentLegacyLibsVersion = '2.1.0-SNAPSHOT'
     posFlowAppManagementVersion = '2.1.0-SNAPSHOT'
 
@@ -34,7 +36,9 @@ ext {
             preferenceCompat : "com.android.support:preference-v14:$supportLibrary",
             supportAnnotation: "com.android.support:support-annotations:$supportLibrary",
             design           : "com.android.support:design:$supportLibrary",
-            constraint       : "com.android.support.constraint:constraint-layout:$constraint"
+            constraint       : "com.android.support.constraint:constraint-layout:$constraint",
+            flexibleAdapter  : "eu.davidea:flexible-adapter:$flexibleAdapterVersion",
+            flexibleAdapterUi: "eu.davidea:flexible-adapter-ui:$flexibleAdapterUiVersion"
     ]
 
     domainDependencies = [
