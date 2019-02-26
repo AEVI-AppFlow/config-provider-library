@@ -17,6 +17,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+android.libraryVariants.all { variant ->
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.getJavaCompiler().destinationDir
+    artifacts.add('archives', task);
+}
+
 def siteUrl = 'https://github.com/AEVI-AppFlow/config-provider-library'
 def gitUrl = 'https://github.com/AEVI-AppFlow/config-provider-library.git'
 
@@ -59,6 +66,10 @@ publishing {
             groupId group
             artifactId "${artifactId}"
             version version
+
+            artifact jarRelease
+            artifact sourcesJar
+            artifact javadocJar
 
             pom.withXml {
                 def root = asNode()
