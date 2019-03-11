@@ -20,9 +20,12 @@ import android.support.v4.content.ContextCompat;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 
-final class IconHelper {
+public final class IconHelper {
 
-    static Drawable getIcon(Context context, AppInfoModel item) {
+    public static Drawable getIcon(Context context, AppInfoModel item) {
+        if (item == null) {
+            return null;
+        }
         Drawable appIcon = getAppIcon(context, item);
         if (appIcon == null) {
             appIcon = ContextCompat.getDrawable(context, android.R.drawable.sym_def_app_icon);

@@ -52,13 +52,13 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     };
 
     @Inject
-    ProviderFlowConfigStore flowConfigStore;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     @Inject
     FlowAppChangeReceiver flowAppChangeReceiver;
+
+    @Inject
+    ProviderFlowConfigStore flowConfigStore;
 
     private final List<String> CONFIG_KEYS = new ArrayList<>();
 

@@ -64,17 +64,14 @@ public class ProviderAppScanner {
     }
 
     private void handleApps(List<AppInfoModel> newApps) {
-        if (newApps == null || newApps.size() == 0) {
-            appDatabase.clearApps();
-        } else {
-            for (AppInfoModel appInfoModel : newApps) {
-                appDatabase.save(appInfoModel);
-            }
-            if (settingsProvider.shouldAutoGenerateConfigs()) {
-                Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
-                flowConfigStore.addAllToFlowConfigs(newApps);
-                DefaultConfigProvider.notifyConfigUpdated(appContext);
-            }
+        appDatabase.clearApps();
+        for (AppInfoModel appInfoModel : newApps) {
+            appDatabase.save(appInfoModel, false);
+        }
+        if (settingsProvider.shouldAutoGenerateConfigs()) {
+            Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
+            flowConfigStore.addAllToFlowConfigs(newApps, settingsProvider.getAppsToIgnoreForAutoGeneration());
+            DefaultConfigProvider.notifyConfigUpdated(appContext);
         }
         appDatabase.notifySubscribers();
     }

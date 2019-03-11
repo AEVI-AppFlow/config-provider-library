@@ -19,7 +19,7 @@ public class StartUpReceiver extends BroadcastReceiver {
     SettingsProvider settingsProvider;
 
     @Inject
-    ProviderFlowConfigStore providerFlowConfigStore;
+    ProviderFlowConfigStore flowConfigStore;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -29,7 +29,7 @@ public class StartUpReceiver extends BroadcastReceiver {
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.MY_PACKAGE_REPLACED") &&
                 settingsProvider.shouldOverwriteConfigsOnReinstall()) {
             Log.d(StartUpReceiver.class.getSimpleName(), "Resetting all flows due to re-installation");
-            providerFlowConfigStore.resetFlowConfigs();
+            flowConfigStore.resetFlowConfigs();
         }
     }
 }

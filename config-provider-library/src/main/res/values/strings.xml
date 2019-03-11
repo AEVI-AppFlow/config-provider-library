@@ -25,7 +25,7 @@
     <string name="settings_abort_payment_app_summary">If set, this ensures that the flow will be aborted (CANCELLED) if an error occurs during a call to ANY payment application. If disabled the flow will keep attempting to take payment until manually cancelled.</string>
     <string name="settings_allow_status_bar">Allow status bar access</string>
     <string name="settings_allow_status_bar_summary">If set, this will allow access to FPS from the status bar.</string>
-    <string name="settings_enable_legacy_pa_support">Enable legacy payment app support</string>
+    <string name="settings_enable_legacy_pa_support">Legacy payment app support</string>
     <string name="settings_enable_legacy_pa_support_summary">If set, this will enable support for legacy payment apps (AEVI Public SDK - Simple Payment API v2).</string>
     <string name="settings_use_websocket">Use websocket communications</string>
     <string name="settings_use_websocket_summary">If set, all AppFlow IPC will be performed over a websocket instead of the default Android Messenger</string>
@@ -65,5 +65,25 @@
     <string name="settings_currency_conversion_summary">If set, flow services are allowed to change the currency of a flow (dynamic currency conversion). This feature is currently not available.</string>
     <string name="settings_currency_conversion">Dynamic currency conversion</string>
     <string name="rows">rows</string>
+    <string name="read_only_note">Note! This is a read-only view of the settings as configured by an AppFlow Configuration Provider on the device.</string>
+    <string name="flow_configuration">Flow Configuration</string>
+    <string name="settings_show_flows_no_apps_title">Show flows with no apps</string>
+    <string name="settings_show_flows_no_apps">If set, flows will always be shown regardless of whether there are any apps supporting that flow or not. </string>
+    <string name="settings_show_stages_no_apps_title">Show stages with no apps</string>
+    <string name="settings_show_stages_no_apps">If set, stages will always be shown regardless of whether there are any apps supporting that stage or not. </string>
+    <string name="preferences">Preferences</string>
+    <string name="settings_auto_manage_apps">If set, applications will automatically be added to all flows and stages that they support. Disable for manual flow configuration.</string>
+    <string name="settings_auto_manage_apps_title">Auto manage flows</string>
+    <string name="is_read_only">This is a read-only view of the configuration provided by the \'AppFlow Configuration Provider\'.</string>
+    <string name="auto_is_on">The flows are currently managed automatically, meaning that any AppFlow compliant applications are automatically added to the flows and stages they report as supported.\n\nClick below to switch to manual configuration, which will disable the automatic management of flows. Alternatively you can view the flows in read only mode. Auto/manual can be changed later via preferences (top right corner).</string>
+    <string name="enable_manual_configuration">Configure manually</string>
+    <string name="settings_mandatory_app_title">Mandatory</string>
+    <string name="settings_mandatory_app">If set, this flow will be rejected by FPS if this application is not installed on the device.</string>
+    <string name="settings_conditional_on_title">Conditional On</string>
+    <string name="settings_conditional_on">Provide a condition that needs to be met for the application to be called at this flow stage. An example is \'outcomePartiallyFulfilled\'.</string>
+    <string name="finish">Finish</string>
+    <string name="view_read_only">View read only</string>
+    <string name="enable_all_stages">Enable app for ALL stages</string>
+    <string name="disable_all_stages">Disable app for ALL stages</string>
 
 </resources>

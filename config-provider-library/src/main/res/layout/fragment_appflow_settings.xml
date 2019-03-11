@@ -5,7 +5,7 @@
                 android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
-        android:layout_width="640dp"
+        android:layout_width="@dimen/card_view_width"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true">
 
@@ -26,13 +26,23 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Title"
+                    android:id="@+id/read_only_note"
+                    style="@style/ConfigGeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/read_only_note"
+                    android:visibility="gone"/>
+
+                <TextView
+                    style="@style/ConfigSectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
                     android:text="@string/general_title"/>
 
-                <com.aevi.ui.library.view.settings.SettingTextInput
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
                     android:id="@+id/date_format"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -42,7 +52,7 @@
                     app:editSummary="@string/date_format_summary"
                     app:editTitle="@string/date_format_title"/>
 
-                <com.aevi.ui.library.view.settings.SettingTextInput
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
                     android:id="@+id/time_format"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -52,7 +62,7 @@
                     app:editSummary="@string/time_format_summary"
                     app:editTitle="@string/time_format_title"/>
 
-                <com.aevi.ui.library.view.settings.SettingTextInput
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
                     android:id="@+id/primary_language"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,7 +72,7 @@
                     app:editSummary="@string/primary_language_summary"
                     app:editTitle="@string/primary_language_title"/>
 
-                <com.aevi.ui.library.view.settings.SettingTextInput
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
                     android:id="@+id/primary_currency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,20 +83,20 @@
                     app:editTitle="@string/primary_currency_title"/>
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Title"
+                    style="@style/ConfigSectionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
                     android:text="@string/experimental_features_title"/>
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
+                    style="@style/ConfigGeneralText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_vertical"
                     android:text="@string/warning_experimental"/>
 
-                <com.aevi.ui.library.view.settings.SettingSwitch
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
                     android:id="@+id/use_websocket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

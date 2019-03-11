@@ -17,12 +17,14 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
 
 import com.aevi.sdk.flow.model.config.AppFlowSettings;
 import com.aevi.sdk.pos.flow.config.*;
+import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput;
 import com.aevi.ui.library.view.settings.SettingControl;
 import com.aevi.ui.library.view.settings.SettingSwitch;
-import com.aevi.ui.library.view.settings.SettingTextInput;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -40,19 +42,22 @@ import static com.aevi.android.rxmessenger.MessageConstants.*;
 public class AppFlowSettingsFragment extends BaseFragment {
 
     @BindView(R2.id.date_format)
-    SettingTextInput dateFormat;
+    ConfigSettingTextInput dateFormat;
 
     @BindView(R2.id.time_format)
-    SettingTextInput timeFormat;
+    ConfigSettingTextInput timeFormat;
 
     @BindView(R2.id.primary_language)
-    SettingTextInput primaryLanguage;
+    ConfigSettingTextInput primaryLanguage;
 
     @BindView(R2.id.primary_currency)
-    SettingTextInput primaryCurrency;
+    ConfigSettingTextInput primaryCurrency;
 
     @BindView(R2.id.use_websocket)
     SettingSwitch useWebsocket;
+
+    @BindView(R2.id.read_only_note)
+    TextView readOnlyNote;
 
     @Inject
     Context appContext;
@@ -85,12 +90,13 @@ public class AppFlowSettingsFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         setupGeneral();
         setupExperimental();
         if (readOnlyMode) {
             setReadOnlyMode();
+            readOnlyNote.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,7 +178,7 @@ public class AppFlowSettingsFragment extends BaseFragment {
         }
     }
 
-    private void setupTextInput(SettingTextInput textInput, String initialValue, ValueConsumer valueChangedConsumer) {
+    private void setupTextInput(ConfigSettingTextInput textInput, String initialValue, ValueConsumer valueChangedConsumer) {
         textInput.setValue(initialValue);
         textInput.subscribeToValueChanges().observeOn(AndroidSchedulers.mainThread()).subscribe(value -> {
             boolean accepted = valueChangedConsumer.onValue(value);
