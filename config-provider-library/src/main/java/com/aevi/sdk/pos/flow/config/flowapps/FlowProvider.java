@@ -11,9 +11,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.aevi.sdk.pos.flow.config.model;
+package com.aevi.sdk.pos.flow.config.flowapps;
 
-public enum AppType {
-    VAA,
-    PAYMENT
+/**
+ * Flow details provider.
+ */
+public interface FlowProvider {
+
+    /**
+     * Get all flow config json.
+     *
+     * @return Array of flow config json
+     */
+    String[] getAllFlowConfigs();
 }

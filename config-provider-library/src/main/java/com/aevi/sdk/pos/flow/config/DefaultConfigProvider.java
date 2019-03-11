@@ -51,13 +51,14 @@ public class DefaultConfigProvider extends BaseConfigProvider {
             APPFLOW_CONFIG_KEY_SETTINGS
     };
 
-    private ProviderFlowConfigStore flowConfigStore;
-
     @Inject
     SettingsProvider settingsProvider;
 
     @Inject
     FlowAppChangeReceiver flowAppChangeReceiver;
+
+    @Inject
+    ProviderFlowConfigStore flowConfigStore;
 
     private final List<String> CONFIG_KEYS = new ArrayList<>();
 
@@ -65,7 +66,6 @@ public class DefaultConfigProvider extends BaseConfigProvider {
     public boolean onCreate() {
         ConfigComponentProvider.getFpsConfigComponent().inject(this);
         setupKeys();
-        flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
         flowAppChangeReceiver.registerForBroadcasts();
         return super.onCreate();
     }

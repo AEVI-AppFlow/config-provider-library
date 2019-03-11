@@ -6,4 +6,5 @@
           android:layout_height="?attr/dropdownListPreferredItemHeight"
           android:ellipsize="marquee"
           android:singleLine="true"
-          android:textAllCaps="false"/>
+          android:textAllCaps="false"
+          android:textColor="@color/colorPrimaryDark"/>

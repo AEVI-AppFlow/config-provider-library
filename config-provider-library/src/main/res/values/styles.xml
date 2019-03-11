@@ -67,4 +67,24 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <style name="FlowStageTitle" parent="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorMainText</item>
+    </style>
+
+    <style name="FlowAppSwitchTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">#0b822a</item>
+    </style>
+
+    <style name="FlowActivityDialogTitle" parent="ActivityDialogTitle">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="DefaultButton" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:background">@drawable/default_button</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textColor">@color/defaultButtonText</item>
+    </style>
+
 </resources>

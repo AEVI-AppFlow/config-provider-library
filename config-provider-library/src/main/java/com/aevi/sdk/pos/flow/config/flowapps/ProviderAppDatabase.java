@@ -20,7 +20,6 @@ import android.util.Log;
 import com.aevi.sdk.app.scanning.AppInfoProvider;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 import com.aevi.sdk.flow.model.config.FlowApp;
-import com.aevi.sdk.pos.flow.config.model.AppType;
 import com.aevi.sdk.pos.flow.model.PaymentFlowServiceInfo;
 import com.aevi.sdk.pos.flow.model.PaymentFlowServiceInfoBuilder;
 
@@ -28,16 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-import static com.aevi.sdk.flow.constants.FlowStages.TRANSACTION_PROCESSING;
-
-@Singleton
-public class ProviderAppDatabase implements AppInfoProvider {
+public class ProviderAppDatabase implements AppInfoProvider, AppProvider {
 
     private static final String TAG = ProviderAppDatabase.class.getSimpleName();
 
@@ -47,7 +40,6 @@ public class ProviderAppDatabase implements AppInfoProvider {
 
     private final Context context;
 
-    @Inject
     public ProviderAppDatabase(Context context) {
         this.context = context;
     }
@@ -55,18 +47,6 @@ public class ProviderAppDatabase implements AppInfoProvider {
     @NonNull
     public List<AppInfoModel> getAll() {
         return inMemModels;
-    }
-
-    @NonNull
-    public List<AppInfoModel> filterByType(AppType filterAppType) {
-        List<AppInfoModel> filtered = new ArrayList<>();
-        for (AppInfoModel model : inMemModels) {
-            boolean isTxnProcessing = model.getStages().contains(TRANSACTION_PROCESSING);
-            if ((isTxnProcessing && filterAppType == AppType.PAYMENT || filterAppType == AppType.VAA && !isTxnProcessing)) {
-                filtered.add(model);
-            }
-        }
-        return filtered;
     }
 
     public void save(AppInfoModel appEntity, boolean notify) {

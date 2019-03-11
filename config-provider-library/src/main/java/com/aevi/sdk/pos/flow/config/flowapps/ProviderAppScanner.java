@@ -20,7 +20,6 @@ import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.audit.LogcatAudit;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
 import com.aevi.sdk.pos.flow.config.SettingsProvider;
 
@@ -46,11 +45,11 @@ public class ProviderAppScanner {
     @Inject
     public ProviderAppScanner(ProviderAppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner,
                               LegacyPaymentAppScanner legacyPaymentAppScanner,
-                              Context appContext, SettingsProvider settingsProvider) {
+                              Context appContext, SettingsProvider settingsProvider, ProviderFlowConfigStore flowConfigStore) {
         this.appDatabase = appDatabase;
         this.flowServiceScanner = flowServiceScanner;
         this.legacyPaymentAppScanner = legacyPaymentAppScanner;
-        this.flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
+        this.flowConfigStore = flowConfigStore;
         this.appContext = appContext;
         this.settingsProvider = settingsProvider;
     }
@@ -65,17 +64,14 @@ public class ProviderAppScanner {
     }
 
     private void handleApps(List<AppInfoModel> newApps) {
-        if (newApps == null || newApps.size() == 0) {
-            appDatabase.clearApps();
-        } else {
-            for (AppInfoModel appInfoModel : newApps) {
-                appDatabase.save(appInfoModel);
-            }
-            if (settingsProvider.shouldAutoGenerateConfigs()) {
-                Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
-                flowConfigStore.addAllToFlowConfigs(newApps);
-                DefaultConfigProvider.notifyConfigUpdated(appContext);
-            }
+        appDatabase.clearApps();
+        for (AppInfoModel appInfoModel : newApps) {
+            appDatabase.save(appInfoModel, false);
+        }
+        if (settingsProvider.shouldAutoGenerateConfigs()) {
+            Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
+            flowConfigStore.addAllToFlowConfigs(newApps, settingsProvider.getAppsToIgnoreForAutoGeneration());
+            DefaultConfigProvider.notifyConfigUpdated(appContext);
         }
         appDatabase.notifySubscribers();
     }

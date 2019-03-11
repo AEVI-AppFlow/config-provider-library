@@ -29,7 +29,7 @@ public class FlowAppChangeReceiver extends AppChangeReceiver {
 
     public FlowAppChangeReceiver() {
         super(ConfigComponentProvider.getFpsConfigComponent().provideAppDatabase());
-        this.appEntityScanningHelper = ConfigComponentProvider.getFpsConfigComponent().provideAppEntityScanningHelper();
+        this.appEntityScanningHelper = ConfigComponentProvider.getFpsConfigComponent().provideAppScanner();
         this.context = ConfigComponentProvider.getFpsConfigComponent().provideApplicationContext();
     }
 

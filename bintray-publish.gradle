@@ -67,7 +67,7 @@ publishing {
             artifactId "${artifactId}"
             version version
 
-            artifact jarRelease
+            //artifact jarRelease TODO this messes up the dependency chain
             artifact sourcesJar
             artifact javadocJar
 
