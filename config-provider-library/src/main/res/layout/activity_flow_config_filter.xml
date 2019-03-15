@@ -4,15 +4,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_marginBottom="@dimen/margin_vertical"
-              android:gravity="center_horizontal"
               android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/title_bar"
-        style="@style/FlowActivityDialogTitle"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginBottom="@dimen/margin_vertical">
+        android:layout_marginBottom="@dimen/margin_vertical"
+        android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/title"
@@ -20,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_horizontal"
             android:text="@string/preferences"/>
 
     </FrameLayout>
@@ -29,7 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_horizontal"
-        android:layout_marginRight="@dimen/margin_horizontal"
         android:layout_marginBottom="@dimen/margin_vertical"
         app:switchDefaultValue="false"
         app:switchSummary="@string/settings_auto_manage_apps"
@@ -40,7 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_horizontal"
-        android:layout_marginRight="@dimen/margin_horizontal"
         android:layout_marginBottom="@dimen/margin_vertical"
         app:switchDefaultValue="false"
         app:switchSummary="@string/settings_show_flows_no_apps"
@@ -51,7 +49,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_horizontal"
-        android:layout_marginRight="@dimen/margin_horizontal"
         android:layout_marginBottom="@dimen/margin_vertical"
         app:switchDefaultValue="false"
         app:switchSummary="@string/settings_show_stages_no_apps"
