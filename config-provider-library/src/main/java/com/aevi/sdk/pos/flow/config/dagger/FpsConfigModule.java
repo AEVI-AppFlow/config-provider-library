@@ -47,7 +47,7 @@ public class FpsConfigModule {
         if (flowProvider instanceof ProviderFlowConfigStore) {
             return (ProviderFlowConfigStore) flowProvider;
         }
-        return new ProviderFlowConfigStore(application, new int[0]);
+        return new ProviderFlowConfigStore(application);
     }
 
     @Provides

@@ -33,11 +33,11 @@ public abstract class BaseConfigProviderApplication extends Application {
 
     }
 
-    private void setupFlowConfigs() {
-        flowConfigStore = new ProviderFlowConfigStore(this, getFlowConfigs());
-    }
+    public abstract int[] getFlowConfigs();
 
-    protected abstract int[] getFlowConfigs();
+    public void setupFlowConfigs() {
+        flowConfigStore = new ProviderFlowConfigStore(this);
+    }
 
     private void scanForApps() {
         appEntityScanningHelper.reScanForPaymentAndFlowApps();
@@ -48,7 +48,10 @@ public abstract class BaseConfigProviderApplication extends Application {
                 .fpsConfigModule(new FpsConfigModule(this, flowConfigStore, new ProviderAppDatabase(this)))
                 .build();
         fpsComponent.inject(this);
+        fpsComponent.inject(flowConfigStore);
+        flowConfigStore.init(getFlowConfigs());
         ConfigComponentProvider.setFpsComponent(fpsComponent);
+        ConfigComponentProvider.setConfigProviderApplication(this);
     }
 
 }

@@ -47,6 +47,8 @@ public interface FpsConfigComponent {
 
     ProviderFlowConfigStore provideProviderFlowConfigStore();
 
+    void inject(ProviderFlowConfigStore flowConfigStore);
+
     void inject(FlowConfigFragment flowConfigurationFragment);
 
     void inject(FpsSettingsFragment fpsSettingsFragment);

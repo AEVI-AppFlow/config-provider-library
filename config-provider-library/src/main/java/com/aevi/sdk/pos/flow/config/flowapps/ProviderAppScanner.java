@@ -44,12 +44,12 @@ public class ProviderAppScanner {
 
     @Inject
     public ProviderAppScanner(ProviderAppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner,
-                              LegacyPaymentAppScanner legacyPaymentAppScanner,
-                              Context appContext, SettingsProvider settingsProvider, ProviderFlowConfigStore flowConfigStore) {
+                              LegacyPaymentAppScanner legacyPaymentAppScanner, ProviderFlowConfigStore providerFlowConfigStore,
+                              Context appContext, SettingsProvider settingsProvider) {
         this.appDatabase = appDatabase;
         this.flowServiceScanner = flowServiceScanner;
         this.legacyPaymentAppScanner = legacyPaymentAppScanner;
-        this.flowConfigStore = flowConfigStore;
+        this.flowConfigStore = providerFlowConfigStore;
         this.appContext = appContext;
         this.settingsProvider = settingsProvider;
     }

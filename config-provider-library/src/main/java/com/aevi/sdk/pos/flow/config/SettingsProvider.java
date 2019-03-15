@@ -25,8 +25,9 @@ public class SettingsProvider {
     private final SharedPreferences preferences;
 
     public static final String KEY_AUTO_GENERATE_CONFIGS = "autoGenerateConfigs";
-    public static final String KEY_AUTO_APP_IGNORE_LIST = "autoAppsIgnoreList";
     public static final String KEY_OVERWRITE_CONFIGS_ON_REINSTALL = "overwriteConfigsOnReinstall";
+    public static final String KEY_CONFIGS_FOR_FPS_VERSION = "configsForFpsVersion";
+    public static final String KEY_AUTO_APP_IGNORE_LIST = "autoAppsIgnoreList";
     public static final String KEY_SHOW_FLOWS_NO_APPS = "showFlowsWithNoApps";
     public static final String KEY_SHOW_STAGES_NO_APPS = "showStagesWithNoApps";
 
@@ -127,6 +128,14 @@ public class SettingsProvider {
             return new AppFlowSettings();
         }
         return AppFlowSettings.fromJson(val);
+    }
+
+    public String getFpsVersionUsedForStoredConfigs() {
+        return getString(KEY_CONFIGS_FOR_FPS_VERSION, null);
+    }
+
+    public void setFpsVersionUsedForStoredConfigs(String version) {
+        setString(KEY_CONFIGS_FOR_FPS_VERSION, version);
     }
 
     public String getString(String key, String defaultValue) {
