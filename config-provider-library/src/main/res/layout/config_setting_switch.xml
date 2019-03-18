@@ -35,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/margin_horizontal"
-            android:layout_marginRight="@dimen/margin_horizontal"/>
+            android:layout_marginLeft="@dimen/margin_horizontal"/>
     </LinearLayout>
 </LinearLayout>

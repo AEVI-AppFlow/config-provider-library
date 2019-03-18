@@ -26,6 +26,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.IExpandable;
+import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.flexibleadapter.items.IHeader;
 import eu.davidea.viewholders.ExpandableViewHolder;
 
@@ -70,9 +71,9 @@ public class FlowStageHeader extends AbstractItem<FlowStageHeader.StageViewHolde
         this.expanded = expanded;
         if (viewHolder != null) {
             if (expanded) {
-                animateExpand(viewHolder, false);
+                animateExpand(false);
             } else {
-                animateCollapse(viewHolder);
+                animateCollapse();
             }
         }
     }
@@ -123,24 +124,25 @@ public class FlowStageHeader extends AbstractItem<FlowStageHeader.StageViewHolde
         }
     }
 
-    private void animateExpand(StageViewHolder viewHolder, boolean immediate) {
+    private void animateExpand(boolean immediate) {
         if (hasSubItems()) {
-            RotateAnimation rotate =
-                    new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-            rotate.setDuration(immediate ? 0 : 300);
-            rotate.setFillAfter(true);
-            viewHolder.arrow.startAnimation(rotate);
-            viewHolder.getContentView().setActivated(true);
+            rotateArrow(360, 180, immediate ? 0 : 300);
         }
     }
 
-    private void animateCollapse(StageViewHolder viewHolder) {
-        RotateAnimation rotate =
-                new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(300);
-        rotate.setFillAfter(true);
-        viewHolder.arrow.startAnimation(rotate);
-        viewHolder.getContentView().setActivated(false);
+    private void animateCollapse() {
+        rotateArrow(180, 360, 300);
+    }
+
+    private void rotateArrow(int fromDegrees, int toDegrees, int duration) {
+        if (viewHolder != null) {
+            RotateAnimation rotate =
+                    new RotateAnimation(fromDegrees, toDegrees, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+            rotate.setDuration(duration);
+            rotate.setFillAfter(true);
+            viewHolder.arrow.startAnimation(rotate);
+            viewHolder.getContentView().setActivated(false);
+        }
     }
 
     @Override
@@ -159,6 +161,14 @@ public class FlowStageHeader extends AbstractItem<FlowStageHeader.StageViewHolde
     }
 
     @Override
+    public void onViewAttached(FlexibleAdapter<IFlexible> adapter, StageViewHolder holder, int position) {
+        super.onViewAttached(adapter, holder, position);
+        if (isExpanded()) {
+            animateExpand(true);
+        }
+    }
+
+    @Override
     public void bindViewHolder(FlexibleAdapter adapter, StageViewHolder holder, int position, List payloads) {
         this.viewHolder = holder;
         holder.title.setText(flowStage.getName().replace('_', '-'));
@@ -168,7 +178,7 @@ public class FlowStageHeader extends AbstractItem<FlowStageHeader.StageViewHolde
             setEnabled(true);
             holder.arrow.setVisibility(View.VISIBLE);
             if (isExpanded()) {
-                animateExpand(viewHolder, true);
+                animateExpand(true);
             }
         } else {
             holder.getContentView().setEnabled(false);
@@ -189,6 +199,7 @@ public class FlowStageHeader extends AbstractItem<FlowStageHeader.StageViewHolde
             arrow = view.findViewById(R.id.stage_arrow);
             setFullSpan(true);
         }
+
 
     }
 

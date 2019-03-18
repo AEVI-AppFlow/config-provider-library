@@ -101,4 +101,14 @@ public class FlowAppDetailsActivity extends AppCompatActivity {
         }
         finish();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // No-op
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // No-op
+    }
 }

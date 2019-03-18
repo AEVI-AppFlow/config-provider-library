@@ -142,7 +142,7 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
         }
     }
 
-    private void onSettingsUpdated(String settingKey) {
+    private synchronized void onSettingsUpdated(String settingKey) {
         if (settingKey.equals(KEY_SHOW_FLOWS_NO_APPS) || settingKey.equals(KEY_SHOW_STAGES_NO_APPS)) {
             clearAndSetup(appProvider.getAll(), true);
         } else if (settingKey.equals(KEY_AUTO_GENERATE_CONFIGS)) {
@@ -199,6 +199,9 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
     private void clearAndSetup(List<AppInfoModel> appInfoModels, boolean recreateFlowSpinner) {
         flowMap.clear();
         scanForFlowApps(appInfoModels);
+        if (adapter == null) {
+            setupList();
+        }
         if (recreateFlowSpinner) {
             adapter.notifyDataSetChanged();
             setupFlowSpinner();
@@ -373,8 +376,8 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
         // Drag & drop done...
         if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
             int headerPos = Math.min(dragFromPosition, dragToPosition) - 1;
-            FlowStageHeader draggedItemHeader;
-            while (true) {
+            FlowStageHeader draggedItemHeader = null;
+            while (headerPos >= 0) {
                 AbstractItem item = adapter.getItem(headerPos);
                 if (item instanceof FlowStageHeader) {
                     draggedItemHeader = (FlowStageHeader) item;
@@ -382,9 +385,11 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
                 }
                 --headerPos;
             }
-            int moveOffset = dragToPosition - dragFromPosition;
-            draggedItemHeader.moveItem(dragFromPosition - headerPos - 1, moveOffset);
-            updateAppsOrderInFlow(draggedItemHeader);
+            if (draggedItemHeader != null) {
+                int moveOffset = dragToPosition - dragFromPosition;
+                draggedItemHeader.moveItem(dragFromPosition - headerPos - 1, moveOffset);
+                updateAppsOrderInFlow(draggedItemHeader);
+            }
 
             dragFromPosition = -1;
             dragToPosition = -1;
