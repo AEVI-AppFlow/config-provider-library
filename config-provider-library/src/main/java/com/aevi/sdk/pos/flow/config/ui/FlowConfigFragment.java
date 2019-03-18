@@ -376,8 +376,8 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
         // Drag & drop done...
         if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
             int headerPos = Math.min(dragFromPosition, dragToPosition) - 1;
-            FlowStageHeader draggedItemHeader;
-            while (true) {
+            FlowStageHeader draggedItemHeader = null;
+            while (headerPos >= 0) {
                 AbstractItem item = adapter.getItem(headerPos);
                 if (item instanceof FlowStageHeader) {
                     draggedItemHeader = (FlowStageHeader) item;
@@ -385,9 +385,11 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
                 }
                 --headerPos;
             }
-            int moveOffset = dragToPosition - dragFromPosition;
-            draggedItemHeader.moveItem(dragFromPosition - headerPos - 1, moveOffset);
-            updateAppsOrderInFlow(draggedItemHeader);
+            if (draggedItemHeader != null) {
+                int moveOffset = dragToPosition - dragFromPosition;
+                draggedItemHeader.moveItem(dragFromPosition - headerPos - 1, moveOffset);
+                updateAppsOrderInFlow(draggedItemHeader);
+            }
 
             dragFromPosition = -1;
             dragToPosition = -1;
