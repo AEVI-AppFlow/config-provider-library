@@ -34,6 +34,7 @@ import io.reactivex.Observable;
 public class ProviderAppScanner {
 
     private static final String TAG = ProviderAppScanner.class.getSimpleName();
+    private static final int SERVICE_INFO_TIMEOUT_SECONDS = 3;
 
     private final ProviderAppDatabase appDatabase;
     private final ProviderFlowConfigStore flowConfigStore;
@@ -57,9 +58,10 @@ public class ProviderAppScanner {
     public void reScanForPaymentAndFlowApps() {
         LogcatAudit logcatAudit = new LogcatAudit();
         if (settingsProvider.getFpsSettings().legacyPaymentAppsEnabled()) {
-            Observable.merge(flowServiceScanner.scan(logcatAudit), legacyPaymentAppScanner.scan(logcatAudit)).toList().subscribe(this::handleApps);
+            Observable.merge(flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS), legacyPaymentAppScanner.scan(logcatAudit)).toList()
+                    .subscribe(this::handleApps);
         } else {
-            flowServiceScanner.scan(logcatAudit).toList().subscribe(this::handleApps);
+            flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS).toList().subscribe(this::handleApps);
         }
     }
 
