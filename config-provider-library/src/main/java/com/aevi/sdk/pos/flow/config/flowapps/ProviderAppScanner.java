@@ -58,7 +58,8 @@ public class ProviderAppScanner {
     public void reScanForPaymentAndFlowApps() {
         LogcatAudit logcatAudit = new LogcatAudit();
         if (settingsProvider.getFpsSettings().legacyPaymentAppsEnabled()) {
-            Observable.merge(flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS), legacyPaymentAppScanner.scan(logcatAudit)).toList()
+            Observable.merge(flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS),
+                             legacyPaymentAppScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS)).toList()
                     .subscribe(this::handleApps);
         } else {
             flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS).toList().subscribe(this::handleApps);

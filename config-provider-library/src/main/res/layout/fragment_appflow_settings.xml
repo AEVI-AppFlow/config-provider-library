@@ -87,14 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/section_title_bottom_margin"
-                    android:text="@string/experimental_features_title"/>
-
-                <TextView
-                    style="@style/ConfigGeneralText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_vertical"
-                    android:text="@string/warning_experimental"/>
+                    android:text="@string/comms_title"/>
 
                 <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
                     android:id="@+id/use_websocket"
