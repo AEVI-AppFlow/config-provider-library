@@ -19,12 +19,12 @@ ext {
     flexibleAdapterVersion = '5.0.6'
     flexibleAdapterUiVersion = '1.0.0-b5'
 
-    posFlowSdkVersion = '2.1.0-RC6'
+    posFlowSdkVersion = '2.1.0-RC7'
     posFlowSdkConstants = '2.1.0'
     configApiVersion = '1.2.0'
-    aeviUiLibraryVersion = "2.0.3-SNAPSHOT"
-    paymentLegacyLibsVersion = '2.1.0-RC6'
-    posFlowAppManagementVersion = '2.1.0-RC6'
+    aeviUiLibraryVersion = "2.0.3"
+    paymentLegacyLibsVersion = '2.1.0-RC7'
+    posFlowAppManagementVersion = '2.1.0-RC7'
 
     presentationDependencies = [
 
