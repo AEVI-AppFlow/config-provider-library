@@ -84,7 +84,7 @@
     <string name="settings_conditional_on">Provide a condition that needs to be met for the application to be called at this flow stage. An example is \'outcomePartiallyFulfilled\'.</string>
     <string name="finish">Finish</string>
     <string name="view_read_only">View read only</string>
-    <string name="enable_all_stages">Enable app for ALL stages</string>
-    <string name="disable_all_stages">Disable app for ALL stages</string>
+    <string name="enable_all_stages">Enable this app for ALL stages</string>
+    <string name="disable_all_stages">Disable this app for ALL stages</string>
 
 </resources>

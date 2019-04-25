@@ -436,4 +436,9 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
         toggleAllStages(flowAppInStage, inFlow);
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public int getNumStagesForAppInFlow(FlowAppInStage flowAppInStage) {
+        return flowMap.get(currentFlowName).getFlowAppDataList(flowAppInStage.getId()).size();
+    }
 }

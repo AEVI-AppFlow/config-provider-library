@@ -121,7 +121,7 @@ public class FlowAppItem extends AbstractItem<FlowAppItem.ChildViewHolder> {
         flowAppInStage.updateInFlowState(inFlow, notifyListener);
         setupAppDetails(holder);
         setDraggable(inFlow);
-        if (notifyListener) {
+        if (notifyListener && flowAppInStage.getNumStagesInCurrentFlow() > 1) {
             showToggleAppPopup(holder, inFlow);
         }
     }
@@ -150,7 +150,7 @@ public class FlowAppItem extends AbstractItem<FlowAppItem.ChildViewHolder> {
             if (!toggleBox.isChecked()) {
                 popupWindow.dismiss();
             }
-        }, 2500);
+        }, 2000);
     }
 
     static final class ChildViewHolder extends FlexibleViewHolder {
