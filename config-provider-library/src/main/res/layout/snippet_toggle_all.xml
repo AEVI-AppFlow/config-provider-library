@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@drawable/popup_background"
+              android:elevation="@dimen/default_elevation"
+              android:orientation="horizontal"
+              android:paddingLeft="@dimen/toggle_all_padding"
+              android:paddingTop="@dimen/toggle_all_padding"
+              android:paddingBottom="@dimen/toggle_all_padding">
+
+    <CheckBox
+        android:id="@+id/toggle_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_vertical"
+        android:textSize="@dimen/button_text_size"
+        android:theme="@style/FlowAppSwitchTheme"/>
+
+</LinearLayout>

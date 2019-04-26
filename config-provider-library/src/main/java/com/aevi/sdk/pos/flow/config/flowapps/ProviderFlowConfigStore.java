@@ -18,17 +18,28 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
-import com.aevi.sdk.flow.model.config.*;
+import com.aevi.sdk.flow.model.config.FlowApp;
+import com.aevi.sdk.flow.model.config.FlowConfig;
+import com.aevi.sdk.flow.model.config.FlowConfigBuilder;
+import com.aevi.sdk.flow.model.config.FlowStage;
+import com.aevi.sdk.pos.flow.PaymentApi;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
+import com.aevi.sdk.pos.flow.config.SettingsProvider;
+import com.aevi.sdk.pos.flow.config.model.FlowAppInStage;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okio.BufferedSink;
 import okio.Okio;
 
-public class ProviderFlowConfigStore {
+@Singleton
+public class ProviderFlowConfigStore implements FlowProvider {
 
     private static final String TAG = ProviderFlowConfigStore.class.getSimpleName();
 
@@ -39,13 +50,24 @@ public class ProviderFlowConfigStore {
     private Set<String> allFlowTypes;
     private Set<String> allFlowNames;
 
-    private final int[] defaultFlowConfigs;
+    private int[] defaultFlowConfigs;
+    private Map<String, FlowConfig> defaultConfigCache;
 
-    public ProviderFlowConfigStore(Context context, int[] defaultFlowConfigs) {
+    @Inject
+    SettingsProvider settingsProvider;
+
+    public ProviderFlowConfigStore(Context context) {
         this.context = context;
-        this.defaultFlowConfigs = defaultFlowConfigs;
         allFlowTypes = new HashSet<>();
         allFlowNames = new HashSet<>();
+    }
+
+    private void setDefaultFlowConfigs(int[] defaultFlowConfigs) {
+        this.defaultFlowConfigs = defaultFlowConfigs;
+    }
+
+    public void init(int[] defaultFlowConfigs) {
+        setDefaultFlowConfigs(defaultFlowConfigs);
         if (hasStoredConfigs()) {
             Log.d(TAG, "Found stored configs - parsing");
             parseStoredFlowConfigs();
@@ -53,6 +75,7 @@ public class ProviderFlowConfigStore {
             Log.d(TAG, "No stored configs - writing defaults");
             writeDefaultFlowConfigs();
         }
+        cacheDefaultConfigs();
     }
 
     private void writeDefaultFlowConfigs() {
@@ -65,6 +88,10 @@ public class ProviderFlowConfigStore {
             Log.e(TAG, "Failed to write defaults", e);
         } finally {
             lock.writeLock().unlock();
+            String fpsVersion = PaymentApi.getProcessingServiceVersion(context);
+            if (settingsProvider != null) {
+                settingsProvider.setFpsVersionUsedForStoredConfigs(fpsVersion);
+            }
         }
     }
 
@@ -76,37 +103,18 @@ public class ProviderFlowConfigStore {
         return allFlowTypes;
     }
 
-    public void setAppsOrder(String flowName, String stage, List<AppInfoModel> apps) {
-        lock.writeLock().lock();
-        try {
-            FlowConfig flowConfig = readFlowConfig(flowName);
-            List<FlowApp> flowApps = new ArrayList<>();
-            for (AppInfoModel appInfoModel : apps) {
-                flowApps.add(new FlowApp(appInfoModel.getPaymentFlowServiceInfo().getPackageName()));
-            }
-            flowConfig.setApps(stage, flowApps);
-            saveFlowConfig(flowConfig);
-        } finally {
-            lock.writeLock().unlock();
-        }
+    public void removeFlowAppFromAllStages(String flowName, String id) {
+        removeAppWithId(flowName, id);
     }
 
-    public void toggleFlowAppInConfig(String flowName, AppInfoModel appInfoModel) {
-        FlowConfig flowConfig = readFlowConfig(flowName);
-        if (flowConfig.containsApp(appInfoModel.getPaymentFlowServiceInfo().getPackageName())) {
-            removeAppWithId(flowName, appInfoModel.getPaymentFlowServiceInfo().getPackageName());
-        } else {
-            updateFlowAppInConfig(flowName, appInfoModel);
-        }
-    }
-
-    public void addAllToFlowConfigs(List<AppInfoModel> appInfoModels) {
+    public void addAllToFlowConfigs(List<AppInfoModel> appInfoModels, Set<String> packageIgnoreList) {
         lock.writeLock().lock();
         try {
             for (String name : allFlowNames) {
                 FlowConfig flowConfig = readFlowConfig(name);
                 for (AppInfoModel appInfoModel : appInfoModels) {
-                    if (appInfoModel.getPaymentFlowServiceInfo().supportsFlowType(flowConfig.getType())) {
+                    if (appInfoModel.getPaymentFlowServiceInfo().supportsFlowType(flowConfig.getType()) &&
+                            !packageIgnoreList.contains(appInfoModel.getPaymentFlowServiceInfo().getId())) {
                         doUpdateFlowAppInConfig(flowConfig, appInfoModel);
                     }
                 }
@@ -117,22 +125,45 @@ public class ProviderFlowConfigStore {
         }
     }
 
-    public void removeAllApps() {
+    private void doUpdateFlowAppInConfig(FlowConfig flowConfig, AppInfoModel appInfoModel) {
+        Set<String> stages = appInfoModel.getPaymentFlowServiceInfo().getStages();
+        for (String stageName : stages) {
+            FlowStage stage = flowConfig.getStage(stageName);
+            if (stage != null && !stageHasApp(stage, appInfoModel.getPaymentFlowServiceInfo().getPackageName())) {
+                FlowApp flowApp = new FlowApp(appInfoModel.getPaymentFlowServiceInfo().getPackageName());
+                List<FlowApp> flowApps = stage.getFlowApps();
+                int indexForApp = getFlowAppIndex(flowApps, flowApp.getId());
+                if (indexForApp == -1) {
+                    flowApps.add(flowApp);
+                } else {
+                    flowApps.set(indexForApp, flowApp);
+                }
+            }
+        }
+    }
+
+    public void addFlowAppToAllFlowStages(String flowName, List<FlowAppInStage> flowAppInStageList) {
         lock.writeLock().lock();
         try {
-            for (String name : allFlowNames) {
-                FlowConfig flowConfig = readFlowConfig(name);
-                removeAllApps(flowConfig);
-                saveFlowConfig(flowConfig);
+            FlowConfig flowConfig = readFlowConfig(flowName);
+            for (FlowAppInStage flowAppInStage : flowAppInStageList) {
+                addOrUpdateApp(flowAppInStage, flowConfig);
             }
+            saveFlowConfig(flowConfig);
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private void removeAllApps(FlowConfig flowConfig) {
-        for (FlowStage flowStage : flowConfig.getStages(true)) {
-            flowStage.getFlowApps().clear();
+    public void updateFlowAppOrder(String flowName, String stage, List<FlowApp> flowApps) {
+        lock.writeLock().lock();
+        try {
+            FlowConfig flowConfig = readFlowConfig(flowName);
+            FlowStage flowStage = flowConfig.getStage(stage);
+            flowStage.setFlowApps(flowApps);
+            saveFlowConfig(flowConfig);
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
@@ -159,25 +190,18 @@ public class ProviderFlowConfigStore {
         }
     }
 
-    private void updateFlowAppInConfig(String flowName, AppInfoModel appInfoModel) {
+    public void toggleAppInStage(String flowName, FlowAppInStage flowApp, boolean add) {
         lock.writeLock().lock();
         try {
             FlowConfig flowConfig = readFlowConfig(flowName);
-            doUpdateFlowAppInConfig(flowConfig, appInfoModel);
+            if (add) {
+                addOrUpdateApp(flowApp, flowConfig);
+            } else {
+                removeAppsWithIdFromList(flowConfig.getStage(flowApp.getFlowStage()).getFlowApps(), flowApp.getId());
+            }
             saveFlowConfig(flowConfig);
         } finally {
             lock.writeLock().unlock();
-        }
-    }
-
-    private void doUpdateFlowAppInConfig(FlowConfig flowConfig, AppInfoModel appInfoModel) {
-        Set<String> stages = appInfoModel.getPaymentFlowServiceInfo().getStages();
-        for (String stageName : stages) {
-            FlowStage stage = flowConfig.getStage(stageName);
-            if (stage != null && !stageHasApp(stage, appInfoModel.getPaymentFlowServiceInfo().getPackageName())) {
-                FlowApp flowApp = new FlowApp(appInfoModel.getPaymentFlowServiceInfo().getPackageName());
-                addOrUpdateApp(flowApp, stageName, flowConfig);
-            }
         }
     }
 
@@ -190,27 +214,31 @@ public class ProviderFlowConfigStore {
         return false;
     }
 
-    private void addOrUpdateApp(FlowApp flowApp, String stage, FlowConfig flowConfig) {
-        FlowStage requestStage = flowConfig.getStage(stage);
-        AppExecutionType flowAppType = AppExecutionType.MULTIPLE;
-        List<FlowApp> flowAppList;
-        if (requestStage != null) {
-            flowAppList = requestStage.getFlowApps();
-            flowAppType = requestStage.getAppExecutionType();
-        } else {
-            flowAppList = new ArrayList<>();
-            flowAppList.add(flowApp);
-            flowConfig.setApps(stage, flowAppList);
+    private void addOrUpdateApp(FlowAppInStage flowAppInStage, FlowConfig flowConfig) {
+        FlowStage flowStage = flowConfig.getStage(flowAppInStage.getFlowStage());
+        List<FlowApp> flowApps = flowStage.getFlowApps();
+        int indexForApp = getFlowAppIndex(flowApps, flowAppInStage.getId());
+        FlowApp inFlowData = flowAppInStage.getInFlowData();
+        if (inFlowData == null) {
+            FlowApp fromDefaultFlow = getFlowAppFromDefaultFlow(flowConfig.getName(), flowAppInStage.getFlowStage(), flowAppInStage.getId());
+            inFlowData = fromDefaultFlow != null ? fromDefaultFlow : new FlowApp(flowAppInStage.getId());
+            flowAppInStage.setInFlowData(inFlowData);
         }
 
-        if (flowAppType == AppExecutionType.SINGLE) {
-            if (flowAppList.size() > 0) {
-                flowAppList.clear();
-            }
-            flowAppList.add(flowApp);
-        } else if (!flowAppList.contains(flowApp)) {
-            flowAppList.add(flowApp);
+        if (indexForApp == -1) {
+            flowApps.add(inFlowData);
+        } else {
+            flowApps.set(indexForApp, inFlowData);
         }
+    }
+
+    private int getFlowAppIndex(List<FlowApp> flowApps, String flowAppId) {
+        for (int i = 0; i < flowApps.size(); i++) {
+            if (flowApps.get(i).getId().equals(flowAppId)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void saveFlowConfig(FlowConfig flowConfig) {
@@ -283,7 +311,22 @@ public class ProviderFlowConfigStore {
         return "";
     }
 
+    private void checkFpsVersion() {
+        if (settingsProvider != null) {
+            String fpsVersionLastUsed = settingsProvider.getFpsVersionUsedForStoredConfigs();
+            String fpsVersion = PaymentApi.getProcessingServiceVersion(context);
+            if (fpsVersionLastUsed != null) {
+                if (!fpsVersionLastUsed.substring(0, 3).equals(fpsVersion.substring(0, 3))) {
+                    Log.i(TAG, "FPS major/minor version has changed since we stored defaults - clearing back to new defaults");
+                    setDefaultFlowConfigs(ConfigComponentProvider.getConfigProviderApplication().getFlowConfigs());
+                    resetFlowConfigs();
+                }
+            }
+        }
+    }
+
     public String[] getAllFlowConfigs() {
+        checkFpsVersion();
         lock.readLock().lock();
         try {
             String[] flowConfigs = new String[allFlowNames.size()];
@@ -351,6 +394,29 @@ public class ProviderFlowConfigStore {
         allFlowNames.add(flowConfig.getName());
         allFlowTypes.add(flowConfig.getType());
         saveFlowConfig(flowConfig);
+    }
+
+    private void cacheDefaultConfigs() {
+        defaultConfigCache = new HashMap<>();
+        for (int defaultFlowConfig : defaultFlowConfigs) {
+            String json = readFile(defaultFlowConfig);
+            FlowConfig flowConfig = FlowConfig.fromJson(json);
+            if (flowConfig != null) {
+                defaultConfigCache.put(flowConfig.getName(), flowConfig);
+            }
+        }
+    }
+
+    private FlowApp getFlowAppFromDefaultFlow(String flowName, String stage, String flowAppId) {
+        FlowConfig flowConfig = defaultConfigCache.get(flowName);
+        if (flowConfig != null && flowConfig.hasStage(stage)) {
+            List<FlowApp> flowApps = flowConfig.getStage(stage).getFlowApps();
+            int flowAppIndex = getFlowAppIndex(flowApps, flowAppId);
+            if (flowAppIndex >= 0) {
+                return flowApps.get(flowAppIndex);
+            }
+        }
+        return null;
     }
 
     private String readFile(int resourceFile) {

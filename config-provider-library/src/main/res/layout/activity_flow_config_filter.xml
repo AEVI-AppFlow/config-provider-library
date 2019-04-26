@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="@dimen/margin_vertical"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/margin_vertical"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/FlowActivityDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_horizontal"
+            android:text="@string/preferences"/>
+
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
+                android:id="@+id/auto_manage_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_horizontal"
+                android:layout_marginBottom="@dimen/margin_vertical"
+                app:switchDefaultValue="false"
+                app:switchSummary="@string/settings_auto_manage_apps"
+                app:switchTitle="@string/settings_auto_manage_apps_title"/>
+
+            <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
+                android:id="@+id/show_flows_no_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_horizontal"
+                android:layout_marginBottom="@dimen/margin_vertical"
+                app:switchDefaultValue="false"
+                app:switchSummary="@string/settings_show_flows_no_apps"
+                app:switchTitle="@string/settings_show_flows_no_apps_title"/>
+
+            <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
+                android:id="@+id/show_stages_no_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_horizontal"
+                android:layout_marginBottom="@dimen/margin_vertical"
+                app:switchDefaultValue="false"
+                app:switchSummary="@string/settings_show_stages_no_apps"
+                app:switchTitle="@string/settings_show_stages_no_apps_title"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -10,9 +10,15 @@
             android:visible="true"
             app:showAsAction="ifRoom"/>
         <item
-            android:id="@+id/menu_settings"
+            android:id="@+id/menu_appflow_settings"
+            android:icon="@drawable/ic_general_setup_black_24dp"
+            android:title="@string/menu_appflow_settings"
+            android:visible="true"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/menu_fps_settings"
             android:icon="@drawable/ic_settings"
-            android:title="@string/menu_settings"
+            android:title="@string/menu_fps_settings"
             android:visible="true"
             app:showAsAction="ifRoom"/>
     </group>

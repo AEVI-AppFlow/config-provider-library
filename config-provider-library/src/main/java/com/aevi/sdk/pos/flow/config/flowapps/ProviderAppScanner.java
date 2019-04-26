@@ -20,7 +20,6 @@ import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.audit.LogcatAudit;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
 import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
 import com.aevi.sdk.pos.flow.config.SettingsProvider;
 
@@ -35,6 +34,7 @@ import io.reactivex.Observable;
 public class ProviderAppScanner {
 
     private static final String TAG = ProviderAppScanner.class.getSimpleName();
+    private static final int SERVICE_INFO_TIMEOUT_SECONDS = 3;
 
     private final ProviderAppDatabase appDatabase;
     private final ProviderFlowConfigStore flowConfigStore;
@@ -45,37 +45,36 @@ public class ProviderAppScanner {
 
     @Inject
     public ProviderAppScanner(ProviderAppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner,
-                              LegacyPaymentAppScanner legacyPaymentAppScanner,
+                              LegacyPaymentAppScanner legacyPaymentAppScanner, ProviderFlowConfigStore providerFlowConfigStore,
                               Context appContext, SettingsProvider settingsProvider) {
         this.appDatabase = appDatabase;
         this.flowServiceScanner = flowServiceScanner;
         this.legacyPaymentAppScanner = legacyPaymentAppScanner;
-        this.flowConfigStore = BaseConfigProviderApplication.getFlowConfigStore();
+        this.flowConfigStore = providerFlowConfigStore;
         this.appContext = appContext;
         this.settingsProvider = settingsProvider;
     }
 
     public void reScanForPaymentAndFlowApps() {
         LogcatAudit logcatAudit = new LogcatAudit();
-        if (settingsProvider.legacyPaymentAppsEnabled()) {
-            Observable.merge(flowServiceScanner.scan(logcatAudit), legacyPaymentAppScanner.scan(logcatAudit)).toList().subscribe(this::handleApps);
+        if (settingsProvider.getFpsSettings().legacyPaymentAppsEnabled()) {
+            Observable.merge(flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS),
+                             legacyPaymentAppScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS)).toList()
+                    .subscribe(this::handleApps);
         } else {
-            flowServiceScanner.scan(logcatAudit).toList().subscribe(this::handleApps);
+            flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS).toList().subscribe(this::handleApps);
         }
     }
 
     private void handleApps(List<AppInfoModel> newApps) {
-        if (newApps == null || newApps.size() == 0) {
-            appDatabase.clearApps();
-        } else {
-            for (AppInfoModel appInfoModel : newApps) {
-                appDatabase.save(appInfoModel);
-            }
-            if (settingsProvider.shouldAutoGenerateConfigs()) {
-                Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
-                flowConfigStore.addAllToFlowConfigs(newApps);
-                DefaultConfigProvider.notifyConfigUpdated(appContext);
-            }
+        appDatabase.clearApps();
+        for (AppInfoModel appInfoModel : newApps) {
+            appDatabase.save(appInfoModel, false);
+        }
+        if (settingsProvider.shouldAutoGenerateConfigs()) {
+            Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
+            flowConfigStore.addAllToFlowConfigs(newApps, settingsProvider.getAppsToIgnoreForAutoGeneration());
+            DefaultConfigProvider.notifyConfigUpdated(appContext);
         }
         appDatabase.notifySubscribers();
     }

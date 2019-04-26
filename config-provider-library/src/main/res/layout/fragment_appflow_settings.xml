@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="@dimen/card_view_width"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/margin_horizontal"
+                android:layout_marginTop="@dimen/margin_vertical"
+                android:layout_marginRight="@dimen/margin_horizontal"
+                android:layout_marginBottom="@dimen/margin_vertical"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/read_only_note"
+                    style="@style/ConfigGeneralText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    android:text="@string/read_only_note"
+                    android:visibility="gone"/>
+
+                <TextView
+                    style="@style/ConfigSectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
+                    android:text="@string/general_title"/>
+
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
+                    android:id="@+id/date_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:editMaxChars="12"
+                    app:editSuffix=""
+                    app:editSummary="@string/date_format_summary"
+                    app:editTitle="@string/date_format_title"/>
+
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
+                    android:id="@+id/time_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:editMaxChars="8"
+                    app:editSuffix=""
+                    app:editSummary="@string/time_format_summary"
+                    app:editTitle="@string/time_format_title"/>
+
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
+                    android:id="@+id/primary_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:editMaxChars="2"
+                    app:editSuffix=""
+                    app:editSummary="@string/primary_language_summary"
+                    app:editTitle="@string/primary_language_title"/>
+
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput
+                    android:id="@+id/primary_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:editMaxChars="3"
+                    app:editSuffix=""
+                    app:editSummary="@string/primary_currency_summary"
+                    app:editTitle="@string/primary_currency_title"/>
+
+                <TextView
+                    style="@style/ConfigSectionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/section_title_bottom_margin"
+                    android:text="@string/comms_title"/>
+
+                <com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch
+                    android:id="@+id/use_websocket"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_vertical"
+                    app:switchDefaultValue="false"
+                    app:switchSummary="@string/settings_use_websocket_summary"
+                    app:switchTitle="@string/settings_use_websocket"/>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

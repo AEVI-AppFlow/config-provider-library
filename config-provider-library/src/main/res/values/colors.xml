@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2f6ab8</color>
-    <color name="colorPrimaryDark">#173d71</color>
-    <color name="colorAccent">#ff2e7d32</color>
+    <color name="colorPrimary">#426f89</color>
+    <color name="colorPrimaryDark">#244c63</color>
+    <color name="colorPrimaryLight">#96afbd</color>
+    <color name="colorPrimaryExtraLight">#eaeff1</color>
+    <color name="colorAccent">#96afbd</color>
     <color name="colorAlert">#ff999999</color>
     <color name="colorMainText">#ff333333</color>
     <color name="colorTitleText">#ffffff</color>
@@ -13,5 +15,23 @@
     <color name="colorColumnHeadBackground">#dddddd</color>
 
     <color name="flowAppDisabled">#cccccc</color>
+    <color name="itemDivider">#d6d6d6</color>
 
+    <color name="colorMenuBackground">#83858b</color>
+    <color name="colorMenuBackgroundSelected">#3b3d42</color>
+    <color name="colorMenuDivider">#666666</color>
+    <color name="colorHeader">#2D717C</color>
+    <color name="colorHeaderPressed">#b4b4b7</color>
+    <color name="colorItem">#f2f2f4</color>
+    <color name="colorItemPressed">#f4f4f2</color>
+
+    <color name="material_text_color_white_text">#deffffff</color>
+    <color name="colorAccent_light">#ff4081</color><!-- Pink A200 -->
+    <color name="list_choice_normal_bg_light">#fffafafa</color>
+    <color name="list_choice_pressed_bg_light">#fddd</color>
+
+    <color name="defaultButtonText">#ffffff</color>
+    <color name="defaultButtonBackground">#4b9b63</color>
+    <color name="defaultButtonBackgroundDark">#3f8f50</color>
+    <color name="defaultButtonBackgroundDisabled">#dddddd</color>
 </resources>

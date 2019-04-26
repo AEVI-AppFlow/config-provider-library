@@ -6,6 +6,7 @@ import android.content.Context;
 import com.aevi.sdk.pos.flow.config.dagger.DaggerFpsConfigComponent;
 import com.aevi.sdk.pos.flow.config.dagger.FpsConfigComponent;
 import com.aevi.sdk.pos.flow.config.dagger.FpsConfigModule;
+import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppDatabase;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
 
@@ -13,8 +14,7 @@ import javax.inject.Inject;
 
 public abstract class BaseConfigProviderApplication extends Application {
 
-    protected static FpsConfigComponent fpsComponent;
-    protected static ProviderFlowConfigStore flowConfigStore;
+    private ProviderFlowConfigStore flowConfigStore;
 
     @Inject
     ProviderAppScanner appEntityScanningHelper;
@@ -33,18 +33,10 @@ public abstract class BaseConfigProviderApplication extends Application {
 
     }
 
-    private void setupFlowConfigs() {
-        flowConfigStore = new ProviderFlowConfigStore(this, getFlowConfigs());
-    }
+    public abstract int[] getFlowConfigs();
 
-    protected abstract int[] getFlowConfigs();
-
-    public static ProviderFlowConfigStore getFlowConfigStore() {
-        return flowConfigStore;
-    }
-
-    public static SettingsProvider getSettingsProvider() {
-        return fpsComponent.provideSettingsProvider();
+    public void setupFlowConfigs() {
+        flowConfigStore = new ProviderFlowConfigStore(this);
     }
 
     private void scanForApps() {
@@ -52,14 +44,14 @@ public abstract class BaseConfigProviderApplication extends Application {
     }
 
     protected void setupDagger() {
-        fpsComponent = DaggerFpsConfigComponent.builder()
-                .fpsConfigModule(new FpsConfigModule(this))
+        FpsConfigComponent fpsComponent = DaggerFpsConfigComponent.builder()
+                .fpsConfigModule(new FpsConfigModule(this, flowConfigStore, new ProviderAppDatabase(this)))
                 .build();
-
         fpsComponent.inject(this);
+        fpsComponent.inject(flowConfigStore);
+        flowConfigStore.init(getFlowConfigs());
+        ConfigComponentProvider.setFpsComponent(fpsComponent);
+        ConfigComponentProvider.setConfigProviderApplication(this);
     }
 
-    public static FpsConfigComponent getFpsConfigComponent() {
-        return fpsComponent;
-    }
 }

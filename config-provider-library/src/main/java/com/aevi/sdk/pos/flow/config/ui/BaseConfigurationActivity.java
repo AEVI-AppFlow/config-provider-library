@@ -13,6 +13,7 @@
  */
 package com.aevi.sdk.pos.flow.config.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,8 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.aevi.sdk.pos.flow.config.BaseConfigProviderApplication;
-import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
 import com.aevi.sdk.pos.flow.config.R;
 import com.aevi.sdk.pos.flow.config.R2;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderAppScanner;
@@ -44,8 +44,8 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
     private static final String SAVE_VIEW = "saveView";
 
     private int lastDisplayItem;
-    private Menu refreshMenu;
-    private boolean showRefreshMenu;
+    private Menu appMenu;
+    private Fragment currentFragment;
 
     @Inject
     ProviderAppScanner appEntityScanningHelper;
@@ -62,15 +62,13 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BaseConfigProviderApplication.getFpsConfigComponent().inject(this);
+        ConfigComponentProvider.getFpsConfigComponent().inject(this);
 
         setContentView(R.layout.activity_configuration);
         ButterKnife.bind(this);
         setupNavigationBar();
         setInitialMenuItem(savedInstanceState);
     }
-
-    protected abstract int[] getAppColorList();
 
     protected int getNavigationMenu() {
         return R.menu.settings_menu;
@@ -108,7 +106,6 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -120,14 +117,26 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         showFragment(lastDisplayItem);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (currentFragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .remove(currentFragment)
+                    .commitAllowingStateLoss();
+        }
     }
 
     private void showFragment(int menuId) {
         Fragment fragment = getFragmentForId(menuId);
         FragmentManager fragmentManager = getSupportFragmentManager();
+        currentFragment = fragment;
         if (fragmentManager != null) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.content, fragment, null);
@@ -138,26 +147,30 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
 
     protected Fragment getFragmentForId(int menuId) {
         if (menuId == R.id.menu_flow_configuration) {
-            setRefreshMenuVisible(true);
-            return FlowConfigurationFragment.create(getAppColorList());
+            setMenuGroupVisible(R.id.flow_config_settings, true);
+            toolbar.setTitle(R.string.flow_configuration);
+            return new FlowConfigFragment();
+        } else if (menuId == R.id.menu_fps_settings) {
+            setMenuGroupVisible(R.id.flow_config_settings, false);
+            toolbar.setTitle(R.string.fps_settings);
+            return new FpsSettingsFragment();
         } else {
-            setRefreshMenuVisible(false);
-            return new SettingsFragment();
+            setMenuGroupVisible(R.id.flow_config_settings, false);
+            toolbar.setTitle(R.string.appflow_settings);
+            return new AppFlowSettingsFragment();
         }
     }
 
-    private void setRefreshMenuVisible(boolean visible) {
-        showRefreshMenu = visible;
-        if (refreshMenu != null) {
-            refreshMenu.setGroupVisible(R.id.refresh_group, visible);
+    private void setMenuGroupVisible(int groupId, boolean visible) {
+        if (appMenu != null) {
+            appMenu.setGroupVisible(groupId, visible);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.refresh_menu, menu);
-        this.refreshMenu = menu;
-        setRefreshMenuVisible(showRefreshMenu);
+        getMenuInflater().inflate(R.menu.app_menu, menu);
+        this.appMenu = menu;
         return true;
     }
 
@@ -171,11 +184,8 @@ public abstract class BaseConfigurationActivity extends BaseActivity implements 
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
             return true;
-        } else if (itemId == R.id.menu_refresh_apps) {
-            appEntityScanningHelper.reScanForPaymentAndFlowApps();
-            return true;
-        } else if (itemId == R.id.menu_send_to_fps) {
-            DefaultConfigProvider.notifyConfigUpdated(this);
+        } else if (itemId == R.id.settings_flow_menu) {
+            startActivity(new Intent(this, FlowConfigFilterActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

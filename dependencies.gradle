@@ -2,7 +2,7 @@ ext {
     projectTargetSdkVersion = 28
     projectMinSdkVersion = 21
 
-    butterKnifeVersion = '8.8.1'
+    butterKnifeVersion = '9.0.0'
     supportLibrary = '28.0.0'
     constraint = '1.0.2'
 
@@ -16,13 +16,15 @@ ext {
 
     daggerVersion = '2.10'
     roomVersion = '1.0.0'
+    flexibleAdapterVersion = '5.0.6'
+    flexibleAdapterUiVersion = '1.0.0-b5'
 
-    posFlowSdkVersion = '2.0.0'
-    posFlowSdkConstants = '2.0.11'
+    posFlowSdkVersion = '2.1.0'
+    posFlowSdkConstants = '2.1.0'
     configApiVersion = '1.2.0'
-    aeviUiLibraryVersion = "1.4.0"
-    paymentLegacyLibsVersion = '2.0.0'
-    posFlowAppManagementVersion = '2.0.0'
+    aeviUiLibraryVersion = "2.0.3"
+    paymentLegacyLibsVersion = '2.1.0'
+    posFlowAppManagementVersion = '2.1.0'
 
     presentationDependencies = [
 
@@ -34,7 +36,9 @@ ext {
             preferenceCompat : "com.android.support:preference-v14:$supportLibrary",
             supportAnnotation: "com.android.support:support-annotations:$supportLibrary",
             design           : "com.android.support:design:$supportLibrary",
-            constraint       : "com.android.support.constraint:constraint-layout:$constraint"
+            constraint       : "com.android.support.constraint:constraint-layout:$constraint",
+            flexibleAdapter  : "eu.davidea:flexible-adapter:$flexibleAdapterVersion",
+            flexibleAdapterUi: "eu.davidea:flexible-adapter-ui:$flexibleAdapterUiVersion"
     ]
 
     domainDependencies = [
@@ -45,7 +49,7 @@ ext {
             appFlowConstants      : "com.aevi.sdk.flow:api-constants:$posFlowSdkConstants",
             appFlowAppManagement  : "com.aevi.sdk:pos-flow-app-management:$posFlowAppManagementVersion",
             configApi             : "com.aevi.sdk.config:config-api:$configApiVersion",
-            aeviUiLibrary         : "com.aevi.ui.library:ui-library:$aeviUiLibraryVersion",
+            aeviUiLibrary         : "com.aevi.ui.library:ui-library:$aeviUiLibraryVersion@aar",
             paymentLegacyConverter: "com.aevi.sdk:payment-legacy-converter:$paymentLegacyLibsVersion",
             paymentLegacyAppUtils : "com.aevi.sdk:payment-legacy-app-utils:$paymentLegacyLibsVersion",
             dagger                : "com.google.dagger:dagger:$daggerVersion",
