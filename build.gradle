@@ -13,8 +13,8 @@ buildscript {
     }
 }
 
-ext.versionCode = 2000003
-version = "2.0.0-SNAPSHOT"
+ext.versionCode = 2000000
+version = "2.0.0"
 
 allprojects {
 

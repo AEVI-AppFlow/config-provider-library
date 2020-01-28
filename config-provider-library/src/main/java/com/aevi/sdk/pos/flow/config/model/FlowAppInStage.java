@@ -85,6 +85,10 @@ public class FlowAppInStage {
         listener.onToggleAll(this, inFlow);
     }
 
+    public int getNumStagesInCurrentFlow() {
+        return listener.getNumStagesForAppInFlow(this);
+    }
+
     public static FlowAppInStage fromFlowApp(FlowApp flowApp, FlowAppStateChangedListener listener, String stage) {
         FlowAppInStage flowAppInStage = new FlowAppInStage(flowApp.getId(), listener);
         flowAppInStage.setInFlowData(flowApp);
@@ -96,5 +100,7 @@ public class FlowAppInStage {
         void onFlowAppToggled(FlowAppInStage flowAppInStage, boolean inFlow);
 
         void onToggleAll(FlowAppInStage flowAppInStage, boolean inFlow);
+
+        int getNumStagesForAppInFlow(FlowAppInStage flowAppInStage);
     }
 }

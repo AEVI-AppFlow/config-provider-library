@@ -19,12 +19,12 @@ ext {
     flexibleAdapterVersion = '5.0.6'
     flexibleAdapterUiVersion = '1.0.0-b5'
 
-    posFlowSdkVersion = '2.1.0-SNAPSHOT'
+    posFlowSdkVersion = '2.1.0'
     posFlowSdkConstants = '2.1.0'
     configApiVersion = '1.2.0'
-    aeviUiLibraryVersion = "2.0.3-SNAPSHOT"
-    paymentLegacyLibsVersion = '2.1.0-SNAPSHOT'
-    posFlowAppManagementVersion = '2.1.0-SNAPSHOT'
+    aeviUiLibraryVersion = "2.0.3"
+    paymentLegacyLibsVersion = '2.1.0'
+    posFlowAppManagementVersion = '2.1.0'
 
     presentationDependencies = [
 
@@ -49,7 +49,7 @@ ext {
             appFlowConstants      : "com.aevi.sdk.flow:api-constants:$posFlowSdkConstants",
             appFlowAppManagement  : "com.aevi.sdk:pos-flow-app-management:$posFlowAppManagementVersion",
             configApi             : "com.aevi.sdk.config:config-api:$configApiVersion",
-            aeviUiLibrary         : "com.aevi.ui.library:ui-library:$aeviUiLibraryVersion",
+            aeviUiLibrary         : "com.aevi.ui.library:ui-library:$aeviUiLibraryVersion@aar",
             paymentLegacyConverter: "com.aevi.sdk:payment-legacy-converter:$paymentLegacyLibsVersion",
             paymentLegacyAppUtils : "com.aevi.sdk:payment-legacy-app-utils:$paymentLegacyLibsVersion",
             dagger                : "com.google.dagger:dagger:$daggerVersion",
