@@ -13,7 +13,7 @@
  */
 package com.aevi.sdk.pos.flow.config.ui;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;

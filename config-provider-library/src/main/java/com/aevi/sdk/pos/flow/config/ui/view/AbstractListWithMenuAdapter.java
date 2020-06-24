@@ -13,8 +13,8 @@
  */
 package com.aevi.sdk.pos.flow.config.ui.view;
 
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;

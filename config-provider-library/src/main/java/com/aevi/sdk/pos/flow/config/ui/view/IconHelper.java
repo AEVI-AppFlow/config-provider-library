@@ -16,7 +16,7 @@ package com.aevi.sdk.pos.flow.config.ui.view;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 
