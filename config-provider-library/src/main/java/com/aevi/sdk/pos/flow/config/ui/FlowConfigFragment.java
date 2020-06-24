@@ -1,11 +1,6 @@
 package com.aevi.sdk.pos.flow.config.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,11 +8,21 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
 import com.aevi.sdk.flow.model.config.FlowApp;
 import com.aevi.sdk.flow.model.config.FlowConfig;
 import com.aevi.sdk.flow.model.config.FlowStage;
-import com.aevi.sdk.pos.flow.config.*;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
+import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
+import com.aevi.sdk.pos.flow.config.R;
+import com.aevi.sdk.pos.flow.config.R2;
+import com.aevi.sdk.pos.flow.config.SettingsProvider;
 import com.aevi.sdk.pos.flow.config.flowapps.AppProvider;
 import com.aevi.sdk.pos.flow.config.flowapps.FlowProvider;
 import com.aevi.sdk.pos.flow.config.flowapps.ProviderFlowConfigStore;
@@ -26,9 +31,13 @@ import com.aevi.sdk.pos.flow.config.ui.item.AbstractItem;
 import com.aevi.sdk.pos.flow.config.ui.item.FlowAppItem;
 import com.aevi.sdk.pos.flow.config.ui.item.FlowList;
 import com.aevi.sdk.pos.flow.config.ui.item.FlowStageHeader;
-import com.aevi.ui.library.recycler.DropDownSpinner;
+import com.aevi.sdk.pos.flow.config.ui.view.DropDownSpinner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -338,8 +347,8 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
         items.setHasFixedSize(true);
         items.setItemAnimator(new DefaultItemAnimator());
         items.addItemDecoration(new FlexibleItemDecoration(getActivity())
-                                        .withDivider(R.drawable.divider)
-                                        .withDrawOver(true));
+                .withDivider(R.drawable.divider)
+                .withDrawOver(true));
         actionModeHelper = new ActionModeHelper(adapter, 0);
     }
 

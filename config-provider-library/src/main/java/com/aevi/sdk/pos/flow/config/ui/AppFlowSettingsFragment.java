@@ -16,15 +16,15 @@ package com.aevi.sdk.pos.flow.config.ui;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
 import com.aevi.sdk.flow.model.config.AppFlowSettings;
 import com.aevi.sdk.pos.flow.config.*;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput;
-import com.aevi.ui.library.view.settings.SettingControl;
-import com.aevi.ui.library.view.settings.SettingSwitch;
+import com.aevi.sdk.pos.flow.config.ui.view.SettingControl;
+import com.aevi.sdk.pos.flow.config.ui.view.SettingSwitch;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
