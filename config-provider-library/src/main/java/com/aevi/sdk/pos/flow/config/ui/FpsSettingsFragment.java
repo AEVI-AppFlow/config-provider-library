@@ -15,7 +15,7 @@ package com.aevi.sdk.pos.flow.config.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,7 +23,7 @@ import com.aevi.sdk.flow.model.config.FpsSettings;
 import com.aevi.sdk.pos.flow.config.*;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingIntegerInput;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch;
-import com.aevi.ui.library.view.settings.SettingControl;
+import com.aevi.sdk.pos.flow.config.ui.view.SettingControl;
 
 import javax.inject.Inject;
 

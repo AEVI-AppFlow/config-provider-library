@@ -76,6 +76,17 @@
         <item name="colorAccent">#0b822a</item>
     </style>
 
+    <style name="ActivityDialogTitle" parent="Base.TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/colorToolbarTitleText</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/colorAlert</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/margin_horizontal</item>
+        <item name="android:paddingRight">@dimen/margin_horizontal</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <style name="FlowActivityDialogTitle" parent="ActivityDialogTitle">
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textSize">18sp</item>

@@ -14,11 +14,11 @@
 package com.aevi.sdk.pos.flow.config.ui.view;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import androidx.annotation.Nullable;
+
 import com.aevi.sdk.pos.flow.config.R;
-import com.aevi.ui.library.view.settings.SettingSwitch;
 
 public class ConfigSettingSwitch extends SettingSwitch {
     public ConfigSettingSwitch(Context context) {

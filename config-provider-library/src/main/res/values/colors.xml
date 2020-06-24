@@ -8,6 +8,10 @@
     <color name="colorAlert">#ff999999</color>
     <color name="colorMainText">#ff333333</color>
     <color name="colorTitleText">#ffffff</color>
+    <color name="colorToolbarTitleText">#ffffff</color>
+
+    <color name="spinnerDropdownBorder">#eeeeee</color>
+    <color name="spinnerDropdownBackground">#f0f0f0</color>
 
     <color name="flowItemBackground">#ffffff</color>
     <color name="appGridBackground">#e0e0e0</color>

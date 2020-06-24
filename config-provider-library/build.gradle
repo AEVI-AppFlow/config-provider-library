@@ -35,18 +35,17 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation presentationDependencies.support
-    implementation presentationDependencies.design
-    implementation presentationDependencies.preferenceCompat
-    implementation presentationDependencies.recyclerView
-
     implementation domainDependencies.appFlowApi
+    implementation domainDependencies.appFlowServiceApi
     implementation domainDependencies.appFlowConstants
     implementation domainDependencies.appFlowAppManagement
     implementation domainDependencies.paymentLegacyConverter
     implementation domainDependencies.paymentLegacyAppUtils
-    implementation domainDependencies.aeviUiLibrary
+    implementation domainDependencies.configApi
 
+    implementation presentationDependencies.design
+    implementation presentationDependencies.appCompat
+    implementation presentationDependencies.recyclerView
     implementation presentationDependencies.flexibleAdapter
     implementation presentationDependencies.flexibleAdapterUi
 
@@ -58,6 +57,9 @@ dependencies {
 
     implementation domainDependencies.rxJava
     implementation domainDependencies.rxAndroid
+    implementation domainDependencies.okio
+    implementation domainDependencies.gson
+
     testImplementation testDependencies.junit
 
 }
