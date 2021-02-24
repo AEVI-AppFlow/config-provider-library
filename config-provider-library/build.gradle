@@ -1,11 +1,20 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
-group = 'com.aevi.sdk.pos.flow.config'
-version = "${apiVersion}"
-ext.applicationName = "config-provider-library"
+apply from: gradleScript('android/versioning.gradle')
 
-apply from: '../publish-repo.gradle'
+group = 'com.aevi.sdk.pos.flow.config'
+version = applicationVersionName
+
+apply from: gradleScript('android/publishing-utils.gradle')
+
+publishingUtils?.publication {
+    groupId group
+    artifactId project.name
+    version applicationVersionName
+}
+
+apply from: '../dependencies.gradle'
 
 android {
     compileSdkVersion projectTargetSdkVersion
@@ -13,8 +22,8 @@ android {
     defaultConfig {
         minSdkVersion projectMinSdkVersion
         targetSdkVersion projectTargetSdkVersion
-        versionCode apiVersionCode
-        versionName "${apiVersion}"
+        versionCode applicationVersionCode
+        versionName applicationVersionName
     }
 
     buildTypes {
@@ -63,6 +72,3 @@ dependencies {
     testImplementation testDependencies.junit
 
 }
-
-apply from: '../aar-publisher.gradle'
-apply from: '../bintray-publish.gradle'
