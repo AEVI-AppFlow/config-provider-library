@@ -2,7 +2,7 @@ ext {
     projectTargetSdkVersion = 28
     projectMinSdkVersion = 21
 
-    butterKnifeVersion = '10.2.1'
+    butterKnifeVersion = '10.2.3'
     constraint = '1.0.2'
 
     gsonVersion = '2.8.6'
@@ -19,7 +19,7 @@ ext {
     flexibleAdapterVersion = '5.0.6'
     flexibleAdapterUiVersion = '1.0.0-b5'
 
-    posFlowSdkVersion = '2.2.1'
+    posFlowSdkVersion = '2.2.4'
     posFlowSdkConstants = '2.3.2'
     configApiVersion = '1.1.0'
     paymentLegacyLibsVersion = '2.1.1'
