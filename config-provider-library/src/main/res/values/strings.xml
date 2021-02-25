@@ -79,7 +79,7 @@
     <string name="auto_is_on">The flows are currently managed automatically, meaning that any AppFlow compliant applications are automatically added to the flows and stages they report as supported.\n\nClick below to switch to manual configuration, which will disable the automatic management of flows. Alternatively you can view the flows in read only mode. Auto/manual can be changed later via preferences (top right corner).</string>
     <string name="enable_manual_configuration">Configure manually</string>
     <string name="settings_app_cancellation_title">Delegate cancellations to</string>
-    <string name="settings_app_cancellations">If set, FPS will delegate cancellation requests to this flow service rather than handling it internally.</string>
+    <string name="settings_app_cancellations">If set, FPS will delegate cancellation requests to this flow service rather than handling them internally.</string>
     <string name="settings_mandatory_app_title">Mandatory</string>
     <string name="settings_mandatory_app">If set, this flow will be rejected by FPS if this application is not installed on the device.</string>
     <string name="settings_conditional_on_title">Conditional On</string>
