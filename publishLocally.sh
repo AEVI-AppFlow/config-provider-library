@@ -1,1 +1,1 @@
-./gradlew :config-provider-library:assemble publishAarPublicationToMavenLocal
+./gradlew :config-provider-library:assemble publishReleasePublicationToMavenLocal
