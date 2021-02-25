@@ -15,7 +15,6 @@ package com.aevi.sdk.pos.flow.config.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -28,6 +27,7 @@ import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingSwitch;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput;
 import com.aevi.util.json.JsonConverter;
 
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,6 +42,9 @@ public class FlowAppDetailsActivity extends AppCompatActivity {
     public static final String KEY_FLOW_APP_NAME = "flowAppName";
     public static final String KEY_READ_ONLY = "readOnly";
 
+    @BindView(R2.id.handles_cancellations)
+    ConfigSettingSwitch handlesCancellations;
+
     @BindView(R2.id.mandatory)
     ConfigSettingSwitch mandatory;
 
@@ -52,6 +55,7 @@ public class FlowAppDetailsActivity extends AppCompatActivity {
     TextView title;
 
     private FlowApp inputFlowApp;
+    private boolean handlesCancellationsValue;
     private boolean mandatoryValue;
     private String conditionalOnValue;
 
@@ -68,13 +72,16 @@ public class FlowAppDetailsActivity extends AppCompatActivity {
         String flowAppName = intent.getStringExtra(KEY_FLOW_APP_NAME);
         boolean readOnly = intent.getBooleanExtra(KEY_READ_ONLY, false);
         title.setText(flowAppName);
+        handlesCancellationsValue = inputFlowApp.shouldDelegateCancellationsTo();
         mandatoryValue = inputFlowApp.isMandatory();
         conditionalOnValue = inputFlowApp.getConditionalOnValue();
 
         setupSwitch(mandatory, mandatoryValue, checked -> mandatoryValue = checked);
+        setupSwitch(handlesCancellations, handlesCancellationsValue, checked -> handlesCancellationsValue = checked);
         setupTextInput(conditionalOn, conditionalOnValue, value -> conditionalOnValue = value);
 
         if (readOnly) {
+            handlesCancellations.setEnabled(false);
             mandatory.setEnabled(false);
             conditionalOn.setEnabled(false);
         }
@@ -94,7 +101,7 @@ public class FlowAppDetailsActivity extends AppCompatActivity {
     public void onClick() {
         try {
             ObservableActivityHelper<FlowApp> helper = ObservableActivityHelper.getInstance(getIntent());
-            helper.sendMessageToClient(new FlowApp(inputFlowApp.getId(), mandatoryValue, conditionalOnValue));
+            helper.sendMessageToClient(new FlowApp(inputFlowApp.getId(), mandatoryValue, conditionalOnValue, handlesCancellationsValue));
             helper.completeStream();
         } catch (NoSuchInstanceException e) {
             // Ignore
