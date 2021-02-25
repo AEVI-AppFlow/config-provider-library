@@ -48,11 +48,6 @@
                 android:paddingRight="@dimen/margin_horizontal"
                 android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
             <com.aevi.sdk.pos.flow.config.ui.view.DropDownSpinner
                 android:id="@+id/flow_spinner"
                 style="@style/Dropdown"
@@ -61,6 +56,12 @@
                 android:elevation="16dp"
                 android:paddingLeft="@dimen/margin_horizontal"
                 android:paddingRight="@dimen/margin_horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
 
         </LinearLayout>
 
