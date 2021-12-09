@@ -144,7 +144,11 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
             if (isReadOnly) {
                 showUserNotification(R.string.is_read_only);
             } else {
-                userNotification.setVisibility(View.GONE);
+                if (appProvider.getAll().size() > 0) {
+                    userNotification.setVisibility(View.GONE);
+                } else {
+                    settingsProvider.setShouldShowFlowsNoApps(true);
+                }
             }
             observe(appProvider.subscribeToAppUpdates()).subscribe(this::onFlowAppsChanged);
             observe(settingsProvider.subscribeToUpdates()).subscribe(this::onSettingsUpdated);
