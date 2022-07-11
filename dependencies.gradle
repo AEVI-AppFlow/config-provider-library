@@ -17,10 +17,9 @@ ext {
     flexibleAdapterVersion = '5.1.0'
     flexibleAdapterUiVersion = '1.0.0'
 
-    appFlowSdkVersion = '2.2.6'
-    appFlowSdkConstants = '2.3.2'
-    configApiVersion = '1.1.0'
-    paymentLegacyLibsVersion = '2.1.1'
+    appFlowSdkVersion = '2.2.8'
+    appFlowSdkConstants = '2.3.8'
+    configApiVersion = '1.1.2'
     appFlowAppManagementVersion = '2.1.2'
 
     presentationDependencies = [
@@ -33,19 +32,17 @@ ext {
     ]
 
     domainDependencies = [
-            rxJava                : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
-            rxAndroid             : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
-            gson                  : "com.google.code.gson:gson:$gsonVersion",
-            okio                  : "com.squareup.okio:okio:$okioVersion",
-            dagger                : "com.google.dagger:dagger:$daggerVersion",
+            rxJava              : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
+            rxAndroid           : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
+            gson                : "com.google.code.gson:gson:$gsonVersion",
+            okio                : "com.squareup.okio:okio:$okioVersion",
+            dagger              : "com.google.dagger:dagger:$daggerVersion",
 
-            appFlowApi            : "com.aevi.sdk.pos.flow:payment-initiation-api:$appFlowSdkVersion",
-            appFlowServiceApi     : "com.aevi.sdk.pos.flow:payment-flow-service-api:$appFlowSdkVersion",
-            appFlowConstants      : "com.aevi.sdk.flow:api-constants:$appFlowSdkConstants",
-            appFlowAppManagement  : "com.aevi.sdk:pos-flow-app-management:$appFlowAppManagementVersion",
-            configApi             : "com.aevi.sdk.config:config-api:$configApiVersion",
-            paymentLegacyConverter: "com.aevi.sdk:payment-legacy-converter:$paymentLegacyLibsVersion",
-            paymentLegacyAppUtils : "com.aevi.sdk:payment-legacy-app-utils:$paymentLegacyLibsVersion",
+            appFlowApi          : "com.aevi.sdk.pos.flow:payment-initiation-api:$appFlowSdkVersion",
+            appFlowServiceApi   : "com.aevi.sdk.pos.flow:payment-flow-service-api:$appFlowSdkVersion",
+            appFlowConstants    : "com.aevi.sdk.flow:api-constants:$appFlowSdkConstants",
+            appFlowAppManagement: "com.aevi.sdk:appflow-app-management:$appFlowAppManagementVersion",
+            configApi           : "com.aevi.sdk.config:config-api:$configApiVersion",
     ]
 
     testDependencies = [
