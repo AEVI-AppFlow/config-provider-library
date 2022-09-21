@@ -19,7 +19,7 @@ ext {
 
     appFlowSdkVersion = '2.4.0-SNAPSHOT'
     appFlowSdkConstants = '2.3.8'
-    configApiVersion = '1.1.0'
+    configApiVersion = '1.2.0'
     paymentLegacyLibsVersion = '2.1.1'
     appFlowAppManagementVersion = '2.1.2'
 
