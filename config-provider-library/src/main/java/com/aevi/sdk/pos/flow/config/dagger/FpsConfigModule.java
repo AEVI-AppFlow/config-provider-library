@@ -16,7 +16,6 @@ package com.aevi.sdk.pos.flow.config.dagger;
 import android.app.Application;
 import android.content.Context;
 
-import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
 import com.aevi.sdk.pos.flow.config.flowapps.AppProvider;
 import com.aevi.sdk.pos.flow.config.flowapps.FlowProvider;
@@ -84,11 +83,5 @@ public class FpsConfigModule {
     @Singleton
     PaymentFlowServiceScanner providePaymentFlowServiceScanner() {
         return new PaymentFlowServiceScanner(application);
-    }
-
-    @Provides
-    @Singleton
-    LegacyPaymentAppScanner provideLegacyPaymentAppScanner() {
-        return new LegacyPaymentAppScanner(application);
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.aevi.sdk.pos.flow.config.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
@@ -109,6 +110,7 @@ public class FlowAppDetailsActivity extends AppCompatActivity {
         finish();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // No-op

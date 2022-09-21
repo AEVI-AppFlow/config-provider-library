@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.5] - TBD
+
+### Changed
+- Bumped to new appflow sdk version(s)
+- Updated to reasonably modern gradle/android build tool chain
+
 ## [2.1.4] - 2021-03-04
 
 ### Changed
