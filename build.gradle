@@ -3,8 +3,8 @@ buildscript {
         google()
         mavenCentral()
         maven {
-            name = "github-pd"
-            url = uri("https://maven.pkg.github.com/aevi-pd/gradle-scripts")
+            name = "github-aevi-appflow"
+            url = uri("https://maven.pkg.github.com/AEVI-AppFlow/gradle-scripts")
             credentials {
                 username = System.getenv("GITHUB_ACTOR") ?: gh_username
                 password = System.getenv("GITHUB_TOKEN") ?: gh_token
