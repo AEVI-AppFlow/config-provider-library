@@ -42,7 +42,7 @@ ext {
             appFlowApi          : "com.aevi.sdk.pos.flow:payment-initiation-api:$appFlowSdkVersion",
             appFlowServiceApi   : "com.aevi.sdk.pos.flow:payment-flow-service-api:$appFlowSdkVersion",
             appFlowConstants    : "com.aevi.sdk.flow:api-constants:$appFlowSdkConstants",
-            appFlowAppManagement: "com.aevi.sdk:pos-flow-app-management:$appFlowAppManagementVersion",
+            appFlowAppManagement: "com.aevi.sdk:appflow-app-management:$appFlowAppManagementVersion",
             configApi           : "com.aevi.sdk.config:config-api:$configApiVersion",
     ]
 
