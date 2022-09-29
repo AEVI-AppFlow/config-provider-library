@@ -4,27 +4,13 @@ This repo contains an Android library that can be used to build upon to implemen
 
 ## Including in your project
 
-This library is as of `v2.1.1` published to the Github packages repository. This is in response to `bintray` and `jcenter` shutting down in May 2021.
-Version `2.1.1` is functionally equivalent to the last published `jcenter()` version (`2.1.0`).
-
-If you require access to an earlier version once `jcenter` has shut down, please contact AEVI for assistance.
-
-Unfortunately Github enforces authentication for retrieving Github packages, even for public repositories. This means that you must
-use a valid Github user and generate a personal access token with `read:packages` ticked and provide as credentials as per below.
-If you do not have a Github user or require assistance with this, please contact AEVI for support.
+This library is as of `v2.1.5` published to the maven central packages repository.
 
 In your root project `build.gradle` file, add
 
 ```
 repositories {
-    maven {
-        name = "AEVI-repos"
-        url = uri("https://maven.pkg.github.com/aevi-appflow/*")
-        credentials {
-            username = <your Github username>
-            password = <your Github personal access token with `read:packages` enabled>
-        }
-    }
+    mavenCentral()
 }
 ```
 
