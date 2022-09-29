@@ -20,27 +20,6 @@ In the gradle dependencies section of your application
 implementation "com.aevi.sdk.pos.flow.config:config-provider-library:${latestVersionNo}"
 ```
 
-See [Github packages](https://github.com/orgs/AEVI-AppFlow/packages?repo_name=config-provider-library) for list of published artifacts.
-
-## Android studio
-
-The API and applications use gradle 4.8 for building. Due to a bug in this version building in Android Studio will cause the following
-error:
-
-```text
-Configuration on demand is not supported by the current version of the Android Gradle plugin since you are using Gradle version 4.6 or above. Suggestion: disable configuration on demand by setting org.gradle.configureondemand=false in your gradle.properties file or use a Gradle version less than 4.6.
-```
-
-In order to disable configuration on demand in Android Studio it must be configured in the settings for Android Studio not the
-`gradle.properties` file as described above. You can disable this setting by navigating to
-
-```text
-Settings - Build, Execution, Deployment - Compiler - Configure on demand
-```
-
-and deselecting the check box.
-
-
 ## Bugs and Feedback
 
 For bugs, feature requests and discussion please use [GitHub Issues](https://github.com/Aevi-AppFlow/config-provider-library/issues)
