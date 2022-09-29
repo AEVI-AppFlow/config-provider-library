@@ -47,7 +47,7 @@ For bugs, feature requests and discussion please use [GitHub Issues](https://git
 
 ## LICENSE
 
-Copyright 2018 AEVI International GmbH
+Copyright 2022 AEVI International GmbH
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
