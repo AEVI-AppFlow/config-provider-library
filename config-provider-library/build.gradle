@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
 apply from: gradleScript('lib/versioning.gradle')
-apply from: gradleScript('android/versioning.gradle')
 apply from: gradleScript('publish/publishing-utils.gradle')
 apply from: gradleScript('android/basic-library.gradle')
 
