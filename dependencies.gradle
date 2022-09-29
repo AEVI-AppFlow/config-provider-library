@@ -17,7 +17,7 @@ ext {
     flexibleAdapterVersion = '5.1.1'
     flexibleAdapterUiVersion = '5.1.1'
 
-    appFlowSdkVersion = '2.4.0-SNAPSHOT'
+    appFlowSdkVersion = '2.4.0'
     appFlowSdkConstants = '2.3.8'
     configApiVersion = '1.2.0'
     paymentLegacyLibsVersion = '2.1.1'

@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.2'
-        classpath 'com.aevi.sdk.build:gradle-scripts:1.5.1'
+        classpath 'com.aevi.sdk.build:gradle-scripts:1.5.2'
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
     }
 }
@@ -28,7 +28,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
         maven { url 'https://jitpack.io' }
     }
 }
