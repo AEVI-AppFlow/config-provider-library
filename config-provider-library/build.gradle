@@ -7,12 +7,13 @@ apply from: gradleScript('publish/publishing-utils.gradle')
 apply from: gradleScript('android/basic-library.gradle')
 
 group = 'com.aevi.sdk.pos.flow.config'
-version = applicationVersionName
+version = libraryVersion
+description = 'config-provider-library'
 
 publishingUtils?.publication {
     groupId group
     artifactId project.name
-    version applicationVersionName
+    version libraryVersion
 }
 
 apply from: '../dependencies.gradle'
