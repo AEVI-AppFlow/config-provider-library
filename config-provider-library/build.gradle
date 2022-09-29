@@ -1,12 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
+apply from: gradleScript('lib/versioning.gradle')
 apply from: gradleScript('android/versioning.gradle')
+apply from: gradleScript('publish/publishing-utils.gradle')
+apply from: gradleScript('android/basic-library.gradle')
 
 group = 'com.aevi.sdk.pos.flow.config'
 version = applicationVersionName
-
-apply from: gradleScript('android/publishing-utils.gradle')
 
 publishingUtils?.publication {
     groupId group
@@ -16,47 +17,32 @@ publishingUtils?.publication {
 
 apply from: '../dependencies.gradle'
 
+apply from: gradleScript('publish/publish-maven-central.gradle')
+
 android {
-    compileSdkVersion projectTargetSdkVersion
-
     defaultConfig {
-        minSdkVersion projectMinSdkVersion
-        targetSdkVersion projectTargetSdkVersion
-        versionCode applicationVersionCode
-        versionName applicationVersionName
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    lintOptions {
-        abortOnError false
+        buildConfigField("String", "NAME", "\"${project.name}\"")
+        buildConfigField("String", "VERSION", "\"${libraryVersion}\"")
+        buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation domainDependencies.appFlowApi
     implementation domainDependencies.appFlowServiceApi
     implementation domainDependencies.appFlowConstants
     implementation domainDependencies.appFlowAppManagement
-    implementation domainDependencies.paymentLegacyConverter
-    implementation domainDependencies.paymentLegacyAppUtils
     implementation domainDependencies.configApi
 
     implementation presentationDependencies.design
     implementation presentationDependencies.appCompat
     implementation presentationDependencies.recyclerView
-    implementation presentationDependencies.flexibleAdapter
-    implementation presentationDependencies.flexibleAdapterUi
+
+    // for reasons I don't understand these need to be exposed to users of this library to
+    // avoid class not found errors. These need to be removed/replaced with something more
+    // standard from Androidx UI
+    api presentationDependencies.flexibleAdapter
+    api presentationDependencies.flexibleAdapterUi
 
     implementation presentationDependencies.butterKnife
     annotationProcessor aptDependencies.butterKnife

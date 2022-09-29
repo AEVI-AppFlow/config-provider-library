@@ -35,10 +35,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
-          java-version: 1.8
+          distribution: zulu
+          java-version: 11
 
       - name: Extract tag from ref
         # ref is refs/tag/<tag> - split by / and retrieve the 3rd element
@@ -60,16 +61,6 @@ jobs:
           -Ptag_version_minor=${{env.VERSION_MINOR}} \
           -Ptag_version_patch=${{env.VERSION_PATCH}} \
 
-      - name: Build and deploy aar to Github packages
-        run: |
-          ./gradlew ${{env.LIBRARY_MODULE}}:build ${{env.LIBRARY_MODULE}}:publishReleasePublicationToGithubRepository \
-          -Pversion_major=${{env.VERSION_MAJOR}} \
-          -Pversion_minor=${{env.VERSION_MINOR}} \
-          -Pversion_patch=${{env.VERSION_PATCH}} \
-          -Pversion_suffix=${{env.VERSION_SUFFIX}} \
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create github release and upload libs
         id: create-release
         uses: softprops/action-gh-release@v1
@@ -81,6 +72,23 @@ jobs:
             ${{ env.LIBRARY_MODULE }}/build/outputs/aar/*release*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish final release versions to Maven Central
+        if: contains(env.TAG, '-') != true
+        run: |
+          ./gradlew assembleRelease publishLibraryPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository \
+          -Pversion_major=${{env.VERSION_MAJOR}} \
+          -Pversion_minor=${{env.VERSION_MINOR}} \
+          -Pversion_patch=${{env.VERSION_PATCH}} \
+          -Pversion_suffix=${{env.VERSION_SUFFIX}} \
+          -Pversion_build_counter=${{env.VERSION_BUILD_NUMBER}} \
+        env:
+          MVN_CENTRAL_USERNAME: ${{ secrets.MVN_CENTRAL_USERNAME }}
+          MVN_CENTRAL_PASSWORD: ${{ secrets.MVN_CENTRAL_PASSWORD }}
+          MVN_CENTRAL_PGP_KEY_ID: ${{ secrets.MVN_CENTRAL_PGP_KEY_ID }}
+          MVN_CENTRAL_PGP_PRIVATE_KEY: ${{ secrets.MVN_CENTRAL_PGP_PRIVATE_KEY }}
+          MVN_CENTRAL_PGP_PASSWORD: ${{ secrets.MVN_CENTRAL_PGP_PASSWORD }}
+          MVN_CENTRAL_STAGING_PROFILE_ID: ${{ secrets.MVN_CENTRAL_STAGING_PROFILE_ID }}
 
       - name: Increment app version patch and suffix if final version was released
         if: contains(env.TAG, '-') != true

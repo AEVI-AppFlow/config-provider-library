@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
         google()
+        mavenCentral()
         maven {
-            name = "github-aevi-uk"
-            url = uri("https://maven.pkg.github.com/aevi-uk/gradle-scripts")
+            name = "github-aevi-appflow"
+            url = uri("https://maven.pkg.github.com/AEVI-AppFlow/gradle-scripts")
             credentials {
                 username = System.getenv("GITHUB_ACTOR") ?: gh_username
                 password = System.getenv("GITHUB_TOKEN") ?: gh_token
@@ -12,8 +12,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
-        classpath 'com.aevi.sdk.build:gradle-scripts:1.0.9'
+        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.aevi.sdk.build:gradle-scripts:1.5.2'
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
     }
 }
@@ -22,5 +22,14 @@ ext.gradleScript = { path ->
     return rootProject.buildscript.classLoader.getResource(path).toURI()
 }
 
+allprojects {
+    ext.applicationTargetSdkVersion = 32
+    ext.applicationMinSdkVersion = 24
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 apply from: gradleScript('root/common-tasks.gradle')
-apply from: gradleScript('root/repositories.gradle')

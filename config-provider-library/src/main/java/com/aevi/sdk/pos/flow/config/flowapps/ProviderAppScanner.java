@@ -16,7 +16,6 @@ package com.aevi.sdk.pos.flow.config.flowapps;
 import android.content.Context;
 import android.util.Log;
 
-import com.aevi.payment.legacy.app.scanning.LegacyPaymentAppScanner;
 import com.aevi.sdk.app.audit.LogcatAudit;
 import com.aevi.sdk.app.scanning.PaymentFlowServiceScanner;
 import com.aevi.sdk.app.scanning.model.AppInfoModel;
@@ -41,15 +40,13 @@ public class ProviderAppScanner {
     private final Context appContext;
     private final SettingsProvider settingsProvider;
     private final PaymentFlowServiceScanner flowServiceScanner;
-    private final LegacyPaymentAppScanner legacyPaymentAppScanner;
 
     @Inject
     public ProviderAppScanner(ProviderAppDatabase appDatabase, PaymentFlowServiceScanner flowServiceScanner,
-                              LegacyPaymentAppScanner legacyPaymentAppScanner, ProviderFlowConfigStore providerFlowConfigStore,
+                              ProviderFlowConfigStore providerFlowConfigStore,
                               Context appContext, SettingsProvider settingsProvider) {
         this.appDatabase = appDatabase;
         this.flowServiceScanner = flowServiceScanner;
-        this.legacyPaymentAppScanner = legacyPaymentAppScanner;
         this.flowConfigStore = providerFlowConfigStore;
         this.appContext = appContext;
         this.settingsProvider = settingsProvider;
@@ -57,13 +54,7 @@ public class ProviderAppScanner {
 
     public void reScanForPaymentAndFlowApps() {
         LogcatAudit logcatAudit = new LogcatAudit();
-        if (settingsProvider.getFpsSettings().legacyPaymentAppsEnabled()) {
-            Observable.merge(flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS),
-                             legacyPaymentAppScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS)).toList()
-                    .subscribe(this::handleApps);
-        } else {
-            flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS).toList().subscribe(this::handleApps);
-        }
+        flowServiceScanner.scan(logcatAudit, SERVICE_INFO_TIMEOUT_SECONDS).toList().subscribe(this::handleApps);
     }
 
     private void handleApps(List<AppInfoModel> newApps) {
