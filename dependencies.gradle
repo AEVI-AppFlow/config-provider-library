@@ -1,6 +1,6 @@
 ext {
-    projectTargetSdkVersion = 28
-    projectMinSdkVersion = 21
+    projectTargetSdkVersion = 33
+    projectMinSdkVersion = 24
 
     butterKnifeVersion = '10.2.3'
 
@@ -17,9 +17,9 @@ ext {
     flexibleAdapterVersion = '5.1.1'
     flexibleAdapterUiVersion = '5.1.1'
 
-    appFlowSdkVersion = '2.4.0'
+    appFlowSdkVersion = '2.5.0-RC.1'
     appFlowSdkConstants = '2.3.8'
-    configApiVersion = '1.2.0'
+    configApiVersion = '3.0.0-RC.2'
     paymentLegacyLibsVersion = '2.1.1'
     appFlowAppManagementVersion = '2.1.2'
 
