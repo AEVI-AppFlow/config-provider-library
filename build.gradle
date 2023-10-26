@@ -41,6 +41,14 @@ allprojects {
                 password = System.getenv("GITHUB_TOKEN_AEVI") ?: gh_token
             }
         }
+        maven {
+            name = "github-aevi-appflow"
+            url = uri("https://maven.pkg.github.com/AEVI-AppFlow/*")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: gh_username
+                password = System.getenv("GITHUB_TOKEN") ?: gh_token
+            }
+        }
     }
 }
 
