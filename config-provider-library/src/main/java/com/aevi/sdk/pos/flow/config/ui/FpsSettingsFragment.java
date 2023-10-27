@@ -138,7 +138,7 @@ public class FpsSettingsFragment extends BaseFragment {
 
     private void notifyChangeIfNecessary() {
         if (hasChanges) {
-            DefaultConfigProvider.notifyConfigUpdated(appContext);
+            DefaultConfigProvider.Companion.notifyConfigUpdated(appContext);
         }
     }
 

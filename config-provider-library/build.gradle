@@ -33,6 +33,9 @@ dependencies {
     implementation domainDependencies.appFlowConstants
     implementation domainDependencies.appFlowAppManagement
     implementation domainDependencies.configApi
+    implementation domainDependencies.appFlowBaseApi
+    implementation domainDependencies.rxMessenger
+    implementation domainDependencies.jsonConverter
 
     implementation presentationDependencies.design
     implementation presentationDependencies.appCompat

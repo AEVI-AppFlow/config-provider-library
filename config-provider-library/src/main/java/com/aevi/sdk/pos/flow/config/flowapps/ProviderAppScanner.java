@@ -65,7 +65,7 @@ public class ProviderAppScanner {
         if (settingsProvider.shouldAutoGenerateConfigs()) {
             Log.d(TAG, "Auto-add apps is set - updating flow config with apps");
             flowConfigStore.addAllToFlowConfigs(newApps, settingsProvider.getAppsToIgnoreForAutoGeneration());
-            DefaultConfigProvider.notifyConfigUpdated(appContext);
+            DefaultConfigProvider.Companion.notifyConfigUpdated(appContext);
         }
         appDatabase.notifySubscribers();
     }

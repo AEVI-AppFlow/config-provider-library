@@ -13,15 +13,22 @@
  */
 package com.aevi.sdk.pos.flow.config.ui;
 
+import static com.aevi.android.rxmessenger.MessageConstants.*;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.aevi.sdk.flow.model.config.AppFlowSettings;
-import com.aevi.sdk.pos.flow.config.*;
+import com.aevi.sdk.pos.flow.config.ConfigComponentProvider;
+import com.aevi.sdk.pos.flow.config.DefaultConfigProvider;
+import com.aevi.sdk.pos.flow.config.R;
+import com.aevi.sdk.pos.flow.config.R2;
+import com.aevi.sdk.pos.flow.config.SettingsProvider;
 import com.aevi.sdk.pos.flow.config.ui.view.ConfigSettingTextInput;
 import com.aevi.sdk.pos.flow.config.ui.view.SettingControl;
 import com.aevi.sdk.pos.flow.config.ui.view.SettingSwitch;
@@ -36,8 +43,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-
-import static com.aevi.android.rxmessenger.MessageConstants.*;
 
 public class AppFlowSettingsFragment extends BaseFragment {
 
@@ -104,7 +109,7 @@ public class AppFlowSettingsFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         if (hasChanges) {
-            DefaultConfigProvider.notifyConfigUpdated(appContext);
+            DefaultConfigProvider.Companion.notifyConfigUpdated(appContext);
         }
     }
 
