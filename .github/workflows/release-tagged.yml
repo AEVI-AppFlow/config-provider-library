@@ -47,11 +47,22 @@ jobs:
         # ref is refs/tag/<tag> - split by / and retrieve the 3rd element
         run: echo "TAG=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_ENV
 
-      - name: Extract semver details from tag
+      - name: Extract semver details from final release tag
+        if: contains(env.TAG, '-') != true
         run: |
           echo "VERSION_MAJOR=$(echo $TAG | cut -d . -f 1)" >> $GITHUB_ENV
           echo "VERSION_MINOR=$(echo $TAG | cut -d . -f 2)" >> $GITHUB_ENV
           echo "VERSION_PATCH=$(echo $TAG | cut -d . -f 3)" >> $GITHUB_ENV
+          echo "PRE_RELEASE=false" >> $GITHUB_ENV
+
+      - name: Extract semver details from pre-release tag
+        if: contains(env.TAG, '-')
+        run: |
+          echo "VERSION_MAJOR=$(echo $TAG | cut -d - -f 1 | cut -d . -f 1)" >> $GITHUB_ENV
+          echo "VERSION_MINOR=$(echo $TAG | cut -d - -f 1 | cut -d . -f 2)" >> $GITHUB_ENV
+          echo "VERSION_PATCH=$(echo $TAG | cut -d - -f 1 | cut -d . -f 3)" >> $GITHUB_ENV
+          echo "VERSION_SUFFIX=-$(echo $TAG | cut -d - -f 2)" >> $GITHUB_ENV
+          echo "PRE_RELEASE=true" >> $GITHUB_ENV
 
       - name: Log info
         run: echo "Version is $VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH$VERSION_SUFFIX"
