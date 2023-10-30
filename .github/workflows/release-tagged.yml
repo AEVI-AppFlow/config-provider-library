@@ -67,12 +67,26 @@ jobs:
       - name: Log info
         run: echo "Version is $VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH$VERSION_SUFFIX"
 
+      - name: Calculate build counter/number for version code by number of tags for this version
+        run: echo "VERSION_BUILD_NUMBER=$(git tag | grep $VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH | wc -l)" >> $GITHUB_ENV
+
       - name: Verify that tag major.minor.patch from tag matches what is in gradle.properties
         run: |
           ./gradlew verifyTagVersionMatchesGradleProperties \
           -Ptag_version_major=${{env.VERSION_MAJOR}} \
           -Ptag_version_minor=${{env.VERSION_MINOR}} \
           -Ptag_version_patch=${{env.VERSION_PATCH}} \
+
+      - name: Build and upload library aars to Github repo
+        run: |
+          ./gradlew assembleRelease publishReleasePublicationToGithubRepository \
+          -Pversion_major=${{env.VERSION_MAJOR}} \
+          -Pversion_minor=${{env.VERSION_MINOR}} \
+          -Pversion_patch=${{env.VERSION_PATCH}} \
+          -Pversion_suffix=${{env.VERSION_SUFFIX}} \
+          -Pversion_build_counter=${{env.VERSION_BUILD_NUMBER}} \
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create github release and upload libs
         id: create-release
