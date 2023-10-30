@@ -1,6 +1,6 @@
 ext {
-    projectTargetSdkVersion = 28
-    projectMinSdkVersion = 21
+    projectTargetSdkVersion = 33
+    projectMinSdkVersion = 24
 
     butterKnifeVersion = '10.2.3'
 
@@ -17,11 +17,13 @@ ext {
     flexibleAdapterVersion = '5.1.1'
     flexibleAdapterUiVersion = '5.1.1'
 
-    appFlowSdkVersion = '2.4.0'
+    appFlowSdkVersion = '2.5.0-RC.1'
     appFlowSdkConstants = '2.3.8'
-    configApiVersion = '1.2.0'
+    configApiVersion = '3.0.0-RC.3'
     paymentLegacyLibsVersion = '2.1.1'
     appFlowAppManagementVersion = '2.1.2'
+    rxMessengerVersion = '6.0.0'
+    jsonConverterVersion = '1.2.0'
 
     presentationDependencies = [
             butterKnife      : "com.jakewharton:butterknife:$butterKnifeVersion",
@@ -40,10 +42,13 @@ ext {
             dagger              : "com.google.dagger:dagger:$daggerVersion",
 
             appFlowApi          : "com.aevi.sdk.pos.flow:payment-initiation-api:$appFlowSdkVersion",
+            appFlowBaseApi      : "com.aevi.sdk.flow:flow-base-api:$appFlowSdkVersion",
             appFlowServiceApi   : "com.aevi.sdk.pos.flow:payment-flow-service-api:$appFlowSdkVersion",
             appFlowConstants    : "com.aevi.sdk.flow:api-constants:$appFlowSdkConstants",
             appFlowAppManagement: "com.aevi.sdk:appflow-app-management:$appFlowAppManagementVersion",
             configApi           : "com.aevi.sdk.config:config-api:$configApiVersion",
+            rxMessenger         : "com.aevi.android:rxmessenger:$rxMessengerVersion",
+            jsonConverter       : "com.aevi.util:json-converter:$jsonConverterVersion"
     ]
 
     testDependencies = [

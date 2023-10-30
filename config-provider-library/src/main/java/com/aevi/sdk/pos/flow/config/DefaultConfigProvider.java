@@ -114,13 +114,13 @@ public class DefaultConfigProvider extends BaseConfigProvider {
 
     @NonNull
     @Override
-    protected String[] getAllowedCallingPackageNames() {
+    public String[] getAllowedCallingPackageNames() {
         return new String[]{};
     }
 
     @NonNull
     @Override
-    protected String getVendorName() {
+    public String getVendorName() {
         return "AEVI";
     }
 

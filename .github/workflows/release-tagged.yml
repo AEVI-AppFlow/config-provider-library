@@ -6,6 +6,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   GITHUB_ACTOR: ${{ secrets.CI_BOT_USERNAME }}
   GITHUB_TOKEN: ${{ secrets.CI_BOT_PAT }}
+  GITHUB_ACTOR_AEVI: ${{ secrets.AEVI_GH_USERNAME }}
+  GITHUB_TOKEN_AEVI: ${{ secrets.AEVI_GH_TOKEN }}
 
 on:
   push:
@@ -45,14 +47,28 @@ jobs:
         # ref is refs/tag/<tag> - split by / and retrieve the 3rd element
         run: echo "TAG=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_ENV
 
-      - name: Extract semver details from tag
+      - name: Extract semver details from final release tag
+        if: contains(env.TAG, '-') != true
         run: |
           echo "VERSION_MAJOR=$(echo $TAG | cut -d . -f 1)" >> $GITHUB_ENV
           echo "VERSION_MINOR=$(echo $TAG | cut -d . -f 2)" >> $GITHUB_ENV
           echo "VERSION_PATCH=$(echo $TAG | cut -d . -f 3)" >> $GITHUB_ENV
+          echo "PRE_RELEASE=false" >> $GITHUB_ENV
+
+      - name: Extract semver details from pre-release tag
+        if: contains(env.TAG, '-')
+        run: |
+          echo "VERSION_MAJOR=$(echo $TAG | cut -d - -f 1 | cut -d . -f 1)" >> $GITHUB_ENV
+          echo "VERSION_MINOR=$(echo $TAG | cut -d - -f 1 | cut -d . -f 2)" >> $GITHUB_ENV
+          echo "VERSION_PATCH=$(echo $TAG | cut -d - -f 1 | cut -d . -f 3)" >> $GITHUB_ENV
+          echo "VERSION_SUFFIX=-$(echo $TAG | cut -d - -f 2)" >> $GITHUB_ENV
+          echo "PRE_RELEASE=true" >> $GITHUB_ENV
 
       - name: Log info
         run: echo "Version is $VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH$VERSION_SUFFIX"
+
+      - name: Calculate build counter/number for version code by number of tags for this version
+        run: echo "VERSION_BUILD_NUMBER=$(git tag | grep $VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH | wc -l)" >> $GITHUB_ENV
 
       - name: Verify that tag major.minor.patch from tag matches what is in gradle.properties
         run: |
@@ -60,6 +76,17 @@ jobs:
           -Ptag_version_major=${{env.VERSION_MAJOR}} \
           -Ptag_version_minor=${{env.VERSION_MINOR}} \
           -Ptag_version_patch=${{env.VERSION_PATCH}} \
+
+      - name: Build and upload library aars to Github repo
+        run: |
+          ./gradlew assembleRelease publishReleasePublicationToGithubRepository \
+          -Pversion_major=${{env.VERSION_MAJOR}} \
+          -Pversion_minor=${{env.VERSION_MINOR}} \
+          -Pversion_patch=${{env.VERSION_PATCH}} \
+          -Pversion_suffix=${{env.VERSION_SUFFIX}} \
+          -Pversion_build_counter=${{env.VERSION_BUILD_NUMBER}} \
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create github release and upload libs
         id: create-release

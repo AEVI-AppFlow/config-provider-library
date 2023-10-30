@@ -128,7 +128,7 @@ public class FlowConfigFragment extends BaseFragment implements FlexibleAdapter.
     public void onStop() {
         super.onStop();
         if (hasChanges) {
-            DefaultConfigProvider.notifyConfigUpdated(getContext());
+            DefaultConfigProvider.Companion.notifyConfigUpdated(getContext());
         }
         adapter = null;
         items.setAdapter(null);
