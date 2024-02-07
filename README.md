@@ -2,6 +2,11 @@
 
 This repo contains an Android library that can be used to build upon to implement a content provider for FPS.
 
+## DEPRECATION NOTICE
+
+> [!IMPORTANT]
+> This repo is as of February 2024 deprecated and further development will take place in a private Aevi repository. Please contact Aevi for any questions or concerns.
+
 ## Including in your project
 
 This library is as of `v2.1.5` published to the maven central packages repository.
